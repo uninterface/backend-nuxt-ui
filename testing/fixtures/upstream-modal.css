@@ -1,0 +1,7 @@
+@import 'tailwindcss';
+@import '@nuxt/ui';
+
+/* Share the comparison page's document font while keeping Preflight headings. */
+@theme {
+  --font-sans: system-ui, sans-serif;
+}

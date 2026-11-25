@@ -1,0 +1,3039 @@
+@import 'tailwindcss';
+@import '@nuxt/ui';
+@import './native-content.css';
+
+@source './';
+
+/* Preserve generated input theme utilities and application overrides while
+   making their native states work on this compound surface as well. */
+@custom-variant focus (&:focus, &:where(.nuxt-input-frame):focus-within, &:where(.nuxt-input-frame[data-engaged]));
+@custom-variant focus-visible (&:focus-visible, &:where(.nuxt-input-frame):focus-within, &:where(.nuxt-input-frame[data-engaged]), &:where(.nuxt-ui-upload-region):focus-within);
+@custom-variant disabled (&:disabled, &:where(.nuxt-input-frame[data-disabled]), &:where(.nuxt-ui-preview-region[data-disabled]));
+
+.nuxt-app {
+  color: var(--ui-text);
+  background: var(--ui-bg);
+
+  box-sizing: border-box;
+  display: flow-root;
+  width: 100%;
+  min-width: 0;
+}
+
+.nuxt-app-viewport {
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* Keep the persistent announcement beside the native button, but position it
+   locally so a button deep inside a scrollport cannot extend document overflow. */
+.nuxt-button-host {
+  position: relative;
+  display: inline-flex;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  vertical-align: baseline;
+}
+.nuxt-button-host > .nuxt-button {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+/* A direct cell action is centered within its inline content line, rather than
+   exporting a caption baseline into the table's measurement wrapper. */
+.nuxt-table-cell-content > .nuxt-button-host {
+  vertical-align: middle;
+}
+/* Custom artwork uses a flex box, without an intervening text baseline. */
+.nuxt-button-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.nuxt-button[data-ui-button-variant='icon'] {
+  justify-content: center;
+}
+.nuxt-button[data-ui-button-variant='icon']:has(
+    > .nuxt-button-icon [data-ui-icon-sized]
+  ) {
+  min-inline-size: min-content;
+}
+.nuxt-button[data-ui-button-variant='icon'][aria-busy='true']:has(
+    > .nuxt-button-icon [data-ui-icon-sized]
+  ) {
+  position: relative;
+}
+.nuxt-button[data-ui-button-variant='icon'][aria-busy='true']
+  > .nuxt-button-icon {
+  visibility: hidden;
+}
+.nuxt-button[data-ui-button-variant='icon'][aria-busy='true']
+  > .nuxt-button-icon:not(:has([data-ui-icon-sized])) {
+  display: none;
+}
+.nuxt-button[data-ui-button-variant='icon']:has(
+    > .nuxt-button-icon [data-ui-icon-sized]
+  )
+  > [data-slot='leadingIcon'] {
+  position: absolute;
+}
+.nuxt-button-status,
+.nuxt-button-label-hidden {
+  inset-block-start: 0;
+  inset-inline-start: 0;
+}
+
+.nuxt-content {
+  /* Bare text needs the same emergency wrapping as ordinary prose. */
+  overflow-wrap: break-word;
+  box-sizing: border-box;
+  display: flow-root;
+  width: 100%;
+  min-width: 0;
+  padding: calc(var(--spacing) * 6);
+  min-height: 0;
+}
+.nuxt-content[data-inset='none'] {
+  padding: 0;
+}
+
+.nuxt-navbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  width: 100%;
+  padding: calc(var(--spacing) * 4) calc(var(--spacing) * 6);
+  gap: calc(var(--spacing) * 4);
+  background: var(--ui-bg);
+  border-block-end: 1px solid var(--ui-border);
+}
+
+.nuxt-navbar-brand,
+.nuxt-navbar-links,
+.nuxt-navbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  min-width: 0;
+  max-width: 100%;
+  gap: calc(var(--spacing) * 4);
+  overflow-wrap: anywhere;
+}
+
+.nuxt-navbar-links {
+  flex: 1 1 auto;
+}
+
+.nuxt-navbar-actions {
+  margin-inline-start: auto;
+}
+
+.nuxt-form {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 6);
+  border-radius: calc(var(--ui-radius) * 2);
+}
+
+.nuxt-layout {
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 0;
+  align-content: start;
+  justify-content: start;
+}
+
+.nuxt-layout-item {
+  min-width: 0;
+  min-height: 0;
+}
+
+.nuxt-region-host {
+  box-sizing: border-box;
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  gap: 0;
+}
+
+.nuxt-region-scroll {
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-auto-rows: max-content;
+  align-content: start;
+  gap: 0;
+}
+
+.nuxt-region-retained,
+.nuxt-region-item {
+  min-width: 0;
+}
+
+.nuxt-layout:focus-visible,
+.nuxt-region-host:focus-visible,
+.nuxt-region-scroll:focus-visible {
+  outline: 2px solid var(--ui-primary);
+  outline-offset: -2px;
+}
+
+@media (forced-colors: active) {
+  .nuxt-layout:focus-visible,
+  .nuxt-region-host:focus-visible,
+  .nuxt-region-scroll:focus-visible {
+    outline-color: Highlight;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nuxt-button .animate-spin {
+    animation: none;
+  }
+}
+
+.nuxt-required::after {
+  /* Override native generated content's spoken text, retaining its spacing. */
+  content: '*';
+  content: '*' / '';
+  color: var(--ui-error);
+  margin-inline-start: calc(var(--spacing) * 0.5);
+}
+
+/* Reka provides menu interaction for inline roots too. Only their allocation
+   differs: the root stays in document flow; nested surfaces remain floating. */
+.nuxt-menu-inline > [data-reka-popper-content-wrapper] {
+  position: static !important;
+  transform: none !important;
+  min-width: 0 !important;
+}
+.nuxt-navigation-list {
+  flex-wrap: wrap;
+}
+/* NavigationMenuViewport owns the panel frame; its inner command list must
+   not add a second dropdown frame. All item states remain toolkit-owned. */
+.nuxt-navigation-content
+  > [data-reka-popper-content-wrapper]
+  > [data-slot='content'] {
+  box-shadow: none;
+  border-radius: 0;
+  background: transparent;
+}
+
+/* Field presentation strategies, with stacked flow on narrow screens. */
+
+.nuxt-field-editor,
+.nuxt-strategy-content {
+  min-width: 0;
+}
+@media (min-width: 40rem) {
+  .nuxt-labels-beside > [data-slot='wrapper'] {
+    flex: 0 0 25%;
+  }
+  .nuxt-labels-beside > :last-child {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 39.999rem) {
+  .nuxt-labels-beside {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.nuxt-required-prefix::after {
+  content: none;
+}
+.nuxt-required-prefix::before {
+  content: '*' / '';
+  color: var(--ui-error);
+  margin-inline-end: calc(var(--spacing) * 0.5);
+}
+
+/* Accessible error text remains available independently of tooltip portals. */
+.nuxt-tooltip-description {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.nuxt-labels-hidden [data-slot='labelWrapper'] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+/* Portable card treatments adapt native theme values; no descendant control styling. */
+.nuxt-card[data-card-top-end] {
+  position: relative;
+}
+.nuxt-card-top-end {
+  position: absolute;
+  inset-block-start: calc(var(--nuxt-card-padding) / 2);
+  inset-inline-end: calc(var(--nuxt-card-padding) / 2);
+  max-inline-size: calc(100% - var(--nuxt-card-padding));
+}
+.nuxt-card {
+  font-size: var(--text-base);
+  --nuxt-card-separator-style: solid;
+  --nuxt-card-padding: calc(var(--spacing) * 4);
+  --nuxt-card-title-size: var(--text-lg);
+  --nuxt-card-base: var(--ui-bg);
+  --nuxt-card-tint: color-mix(
+    in srgb,
+    var(--nuxt-card-accent) 10%,
+    var(--nuxt-card-base)
+  );
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100%;
+  overflow: visible;
+  border: 1px solid var(--nuxt-card-accent);
+  background: var(--nuxt-card-base);
+  color: var(--ui-text);
+}
+.nuxt-card[data-card-density='roomy'] {
+  --nuxt-card-padding: calc(var(--spacing) * 6);
+}
+.nuxt-card[data-card-density='compact'] {
+  --nuxt-card-padding: calc(var(--spacing) * 3);
+}
+.nuxt-card[data-card-title-size='large'] {
+  --nuxt-card-title-size: var(--text-xl);
+}
+.nuxt-card[data-card-title-size='small'] {
+  --nuxt-card-title-size: var(--text-base);
+}
+.nuxt-card[data-card-surface='tinted'] {
+  background: var(--nuxt-card-tint);
+}
+.nuxt-card[data-card-border='dashed'] {
+  --nuxt-card-separator-style: dashed;
+  border-style: dashed;
+}
+.nuxt-card[data-card-border='dotted'] {
+  --nuxt-card-separator-style: dotted;
+  border-style: dotted;
+}
+.nuxt-card[data-card-border='double'] {
+  border-style: double;
+  border-width: 3px;
+}
+.nuxt-card > .nuxt-card-header,
+.nuxt-card > .nuxt-card-body,
+.nuxt-card > .nuxt-card-footer {
+  min-width: 0;
+  padding: var(--nuxt-card-padding);
+  overflow: visible;
+}
+/* An explicitly arranged body owns its insets; nested content stays intact. */
+.nuxt-card[data-card-body='layout'] > .nuxt-card-body {
+  padding: 0;
+}
+.nuxt-card > .nuxt-card-header {
+  border: 0;
+  border-start-start-radius: inherit;
+  border-start-end-radius: inherit;
+  background: transparent;
+  color: inherit;
+}
+/* Loading overlays are extra root children. Divide the card sections explicitly
+   so adding an overlay cannot give the footer a new border or change height. */
+.nuxt-card > .nuxt-card-footer {
+  border-block-start: 1px var(--nuxt-card-separator-style) var(--ui-border);
+}
+.nuxt-card[data-card-header='band'] > .nuxt-card-header {
+  background: var(--nuxt-card-tint);
+  border-block-end: 1px var(--nuxt-card-separator-style) var(--nuxt-card-accent);
+}
+.nuxt-card[data-card-header='plain'] > .nuxt-card-header {
+  padding-block-end: 0;
+}
+.nuxt-card-title {
+  font-size: var(--nuxt-card-title-size);
+  font-weight: 600;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+/* Only headings explicitly supplied to the title slot adopt its presentation. */
+.nuxt-card-title > :where(h1, h2, h3, h4, h5, h6) {
+  font: inherit;
+  margin: 0;
+}
+.nuxt-card-description {
+  font-size: 0.875rem;
+  margin-block-start: 0.25rem;
+}
+.nuxt-card[data-card-elevation='raised'] {
+  box-shadow: var(--shadow-md);
+}
+.nuxt-card[data-card-elevation='flat'] {
+  box-shadow: none;
+}
+
+/* Explicit footer treatment: quieter text without fading the surface or controls. */
+.nuxt-card[data-card-footer='muted'] > .nuxt-card-footer {
+  color: var(--ui-text-muted);
+  font-size: var(--text-sm);
+}
+
+/* Opt-in focus presentation for author-supplied elements. */
+.nuxt-focus-presentation {
+  border-radius: calc(var(--ui-radius) * 2);
+}
+.nuxt-focus-presentation:focus-visible {
+  outline: 3px solid color-mix(in oklab, var(--ui-primary) 25%, transparent);
+  outline-offset: var(--nuxt-contained-focus-offset, 2px);
+}
+@media (forced-colors: active) {
+  .nuxt-focus-presentation:focus-visible {
+    outline: 2px solid Highlight;
+  }
+}
+
+/* Allocation framing stays outside each region's scrolling content. */
+.nuxt-layout {
+  --nuxt-layout-separator-size: 1px;
+  --nuxt-layout-handle-size: 0.5rem;
+}
+.nuxt-layout-item[data-raised] {
+  background: var(--ui-bg);
+}
+/* Boundary emphasis never changes the elevation recipe. */
+.nuxt-layout [data-boundary-role] {
+  --nuxt-layout-boundary-color: var(--ui-border);
+}
+.nuxt-layout [data-boundary-role='start'] {
+  --nuxt-layout-boundary-color: var(--ui-border-accented);
+}
+.nuxt-layout-separator {
+  background: var(--nuxt-layout-boundary-color);
+  align-self: stretch;
+  justify-self: stretch;
+}
+.nuxt-layout-resizer {
+  background: var(--ui-bg);
+  position: relative;
+  align-self: stretch;
+  justify-self: stretch;
+  touch-action: none;
+  user-select: none;
+}
+.nuxt-layout-resizer::before {
+  content: '';
+  position: absolute;
+  background: var(--nuxt-layout-boundary-color);
+}
+.nuxt-layout-resizer[aria-orientation='vertical'] {
+  cursor: col-resize;
+}
+.nuxt-layout-resizer[aria-orientation='horizontal'] {
+  cursor: row-resize;
+}
+.nuxt-layout-resizer[aria-orientation='vertical']::before {
+  inset-block: 0;
+  inset-inline-start: 50%;
+  width: var(--nuxt-layout-separator-size);
+}
+.nuxt-layout-resizer[aria-orientation='horizontal']::before {
+  inset-inline: 0;
+  inset-block-start: 50%;
+  height: var(--nuxt-layout-separator-size);
+}
+@media (forced-colors: active) {
+  .nuxt-layout-separator,
+  .nuxt-layout-resizer::before {
+    background: CanvasText;
+  }
+}
+
+/* Only this absolute decoration is size-contained. Content and focus are not clipped.
+   Rotate the native shadow plane, swapping its dimensions, so its bottom-facing
+   recipe points toward the lower neighbour on every side. */
+.nuxt-layout-edge {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  container-type: size;
+}
+.nuxt-layout-edge::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  border: var(--nuxt-layout-separator-size) solid
+    var(--nuxt-layout-boundary-color);
+}
+.nuxt-layout-edge[data-resizable]::after {
+  display: none;
+}
+.nuxt-layout-edge-shadow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100cqw;
+  height: 100cqh;
+  transform: translate(-50%, -50%);
+  box-shadow: var(--shadow-md);
+}
+.nuxt-layout-edge[data-direction='vertical'][data-edge='before'] {
+  clip-path: inset(-100vmax 0 calc(100% - var(--nuxt-layout-separator-size)) 0);
+}
+.nuxt-layout-edge[data-direction='vertical'][data-edge='before']
+  > .nuxt-layout-edge-shadow {
+  transform: translate(-50%, -50%) scaleY(-1);
+}
+.nuxt-layout-edge[data-direction='vertical'][data-edge='after'] {
+  clip-path: inset(calc(100% - var(--nuxt-layout-separator-size)) 0 -100vmax 0);
+}
+.nuxt-layout-edge[data-direction='horizontal'] > .nuxt-layout-edge-shadow {
+  width: 100cqh;
+  height: 100cqw;
+}
+.nuxt-layout-edge[data-direction='horizontal'][data-edge='before']:dir(ltr),
+.nuxt-layout-edge[data-direction='horizontal'][data-edge='after']:dir(rtl) {
+  clip-path: inset(0 calc(100% - var(--nuxt-layout-separator-size)) 0 -100vmax);
+}
+.nuxt-layout-edge[data-direction='horizontal'][data-edge='before']:dir(ltr)
+  > .nuxt-layout-edge-shadow,
+.nuxt-layout-edge[data-direction='horizontal'][data-edge='after']:dir(rtl)
+  > .nuxt-layout-edge-shadow {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+.nuxt-layout-edge[data-direction='horizontal'][data-edge='after']:dir(ltr),
+.nuxt-layout-edge[data-direction='horizontal'][data-edge='before']:dir(rtl) {
+  clip-path: inset(0 -100vmax 0 calc(100% - var(--nuxt-layout-separator-size)));
+}
+.nuxt-layout-edge[data-direction='horizontal'][data-edge='after']:dir(ltr)
+  > .nuxt-layout-edge-shadow,
+.nuxt-layout-edge[data-direction='horizontal'][data-edge='before']:dir(rtl)
+  > .nuxt-layout-edge-shadow {
+  transform: translate(-50%, -50%) rotate(-90deg);
+}
+@media (forced-colors: active) {
+  .nuxt-layout-edge::after {
+    border-color: CanvasText;
+  }
+  .nuxt-layout-edge-shadow {
+    box-shadow: none !important;
+  }
+}
+
+/* The native top layer owns modality; this adapter owns the dialog surface. */
+.nuxt-modal {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  inset: 0;
+  margin: auto;
+  max-height: none;
+  overflow: visible;
+}
+.nuxt-modal:not([open]) {
+  display: none;
+}
+.nuxt-modal::backdrop {
+  background: color-mix(in oklab, var(--ui-bg-elevated) 75%, transparent);
+}
+.nuxt-modal-surface > [data-slot='header'],
+.nuxt-modal-surface > [data-slot='footer'] {
+  position: relative;
+  background-color: inherit;
+}
+
+.nuxt-modal [data-slot='title'] {
+  margin: 0;
+}
+/* Nuxt's footer follows inline reading order by default. */
+.nuxt-footer-actions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: inherit;
+  align-items: center;
+  inline-size: 100%;
+}
+
+/* Read-only record definitions retain semantic terms and rich values. */
+.nuxt-key-value-list {
+  margin: 0;
+  min-width: 0;
+  container: nuxt-key-value / inline-size;
+  display: grid;
+  grid-template-columns: fit-content(50%) minmax(0, 1fr);
+  column-gap: 1rem;
+}
+.nuxt-key-value-item {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  gap: 0.5em 1rem;
+  padding-block: 0.5em;
+}
+.nuxt-key-value-item > dt {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.nuxt-key-value-item > dd {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+@container nuxt-key-value (max-width: 18rem) {
+  .nuxt-key-value-item {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.25em;
+  }
+}
+
+.nuxt-tab-panel {
+  min-width: 0;
+  min-height: 0;
+  overflow-wrap: anywhere;
+}
+.nuxt-tab-panel[hidden] {
+  display: none;
+}
+
+.nuxt-badge {
+  max-inline-size: 100%;
+  height: auto;
+  min-block-size: 1.5em;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+@layer theme {
+  /* Consume the selected set; an application override takes precedence. */
+  :root,
+  body,
+  [lang] {
+    --font-sans: var(
+      --uninterface-font-family,
+      var(--uninterface-font-set-family, system-ui, sans-serif)
+    );
+  }
+}
+
+:root,
+body,
+[lang]:where(:not(code, pre, kbd, samp)) {
+  font-family: var(--font-sans);
+}
+
+/* Scroll hosts own an inward indicator; descendant clearance is inside their padding. */
+.nuxt-scroll-focus:focus-visible,
+.nuxt-content[data-scroll]:focus-visible {
+  outline: 3px solid color-mix(in oklab, var(--ui-primary) 25%, transparent);
+  outline-offset: calc(-1 * 3px);
+}
+.nuxt-tab-panel:focus-visible {
+  outline-offset: calc(-1 * 3px);
+}
+@media (forced-colors: active) {
+  .nuxt-scroll-focus:focus-visible,
+  .nuxt-content[data-scroll]:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+}
+
+.nuxt-modal [data-slot='body']:focus-visible {
+  outline-offset: calc(-1 * 3px);
+}
+
+/* Unpadded scrolling preserves alignment by containing focus paint, not adding
+   a content gutter. A padded surface starts its own native presentation context. */
+.nuxt-content[data-inset='none'][data-scroll],
+.nuxt-layout[data-scroll],
+.nuxt-scroll-focus,
+.nuxt-region-scroll {
+  --nuxt-contained-focus-offset: calc(-1 * 3px);
+}
+.nuxt-content:not([data-inset='none']),
+.nuxt-card,
+.nuxt-modal {
+  --nuxt-contained-focus-offset: initial;
+}
+
+.nuxt-control-focus:focus-visible {
+  outline-offset: var(--nuxt-contained-focus-offset, 0px);
+}
+.nuxt-choice-group:focus-visible {
+  outline-offset: var(--nuxt-contained-focus-offset, 2px);
+}
+
+/* Keep unbroken message references within the native alert content column. */
+.nuxt-notice {
+  overflow-wrap: anywhere;
+}
+
+[data-password-reveal] svg {
+  inline-size: 1em;
+  block-size: 1em;
+}
+
+.nuxt-ui-suggestions-popup {
+  width: var(--reka-popover-trigger-width);
+  max-width: var(--reka-popover-content-available-width);
+}
+
+.nuxt-ui-suggestions > [role='listbox'] {
+  max-block-size: 18rem;
+  overflow: auto;
+}
+
+.nuxt-ui-file-input {
+  min-inline-size: 0;
+}
+.nuxt-ui-file-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  inline-size: 100%;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  margin: 0;
+  text-align: center;
+}
+.nuxt-ui-file-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  inline-size: 2.5rem;
+  block-size: 2.5rem;
+  max-inline-size: 100%;
+  align-items: center;
+  justify-content: center;
+}
+.nuxt-ui-file-icon > * {
+  inline-size: 100%;
+  block-size: 100%;
+}
+.nuxt-ui-file-icon > [data-file-thumbnail] {
+  object-fit: contain;
+  overflow: hidden;
+}
+.nuxt-ui-file-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  line-height: 1.25;
+}
+.nuxt-ui-file-preview-name {
+  flex: 0 0 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nuxt-ui-file-size {
+  font-size: 0.875em;
+}
+.nuxt-ui-file-preview[data-presentation='row'] {
+  flex-direction: row;
+  justify-content: flex-start;
+  text-align: start;
+}
+.nuxt-ui-file-preview[data-presentation='row'] > .nuxt-ui-file-icon {
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+}
+.nuxt-ui-file-preview[data-presentation='row'] .nuxt-ui-file-details {
+  flex: 1 1 auto;
+}
+.nuxt-ui-file-preview[data-presentation='row'] .nuxt-ui-file-preview-name {
+  font-weight: 600;
+}
+.nuxt-ui-file-collection {
+  list-style: none;
+  padding: 0;
+}
+
+.nuxt-ui-temporal-editor {
+  min-inline-size: 0;
+}
+
+.nuxt-ui-temporal-boundary {
+  min-inline-size: 0;
+}
+
+.nuxt-input-frame {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5em;
+  min-inline-size: 0;
+}
+
+/* A native chooser overlays the visible trigger/name; its focus belongs to the frame. */
+.nuxt-ui-file-input {
+  inline-size: 100%;
+}
+.nuxt-ui-file-chooser {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  flex: 1 1 0;
+  min-inline-size: 0;
+}
+.nuxt-ui-file-name {
+  flex: 1 1 0;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nuxt-ui-file-chooser > input[type='file'] {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+.nuxt-ui-file-chooser > input:disabled {
+  cursor: default;
+}
+
+.nuxt-input-action {
+  flex: 0 0 auto;
+  inline-size: 1lh;
+  block-size: 1lh;
+  min-block-size: 0;
+  padding: 0;
+  font: inherit;
+  line-height: inherit;
+  justify-content: center;
+}
+
+/* Endpoints retain native editing but share the enclosing UiInputFrame surface. */
+.nuxt-ui-temporal-range {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.5em;
+  flex: 1 1 24ch;
+  inline-size: auto;
+  min-inline-size: 0;
+}
+
+/* Open boundaries remain content-sized; spare width follows the whole range. */
+.nuxt-ui-temporal-range[data-open] {
+  display: flex;
+}
+.nuxt-ui-temporal-range[data-open] > .nuxt-ui-temporal-boundary {
+  flex: 0 1 auto;
+}
+.nuxt-ui-temporal-range[data-open] [data-temporal-native] {
+  inline-size: auto;
+  max-inline-size: 100%;
+}
+.nuxt-ui-temporal-spacer {
+  flex: 1 1 0;
+}
+
+/* Explicit frame participants suppress native field-context highlights too.
+   Segment selection and action focus remain owned by their native controls. */
+[data-ui-control-frame='parent'][data-slot='base'] {
+  padding-block: 0;
+  border: 0;
+  box-shadow: none;
+  outline: none;
+  background: transparent;
+}
+[data-ui-control-frame='parent'] > [data-slot='segment'][data-invalid] {
+  color: inherit;
+}
+
+/* Integrated range actions follow the input's font and content height. */
+[data-temporal-range] .nuxt-ui-temporal-range [data-temporal-trigger],
+[data-temporal-range] [data-temporal-unbounded],
+[data-temporal-range] [data-temporal-clear] {
+  font: inherit;
+  min-inline-size: 0;
+  inline-size: 1lh;
+  block-size: 1lh;
+  min-block-size: 0;
+  padding: 0;
+  flex: 0 0 auto;
+}
+
+.temporal-boundary-mode {
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  max-inline-size: 12em;
+  padding-block: 0;
+}
+
+[data-temporal-next-day] {
+  display: inline-flex;
+  align-items: center;
+  inline-size: 1em;
+  block-size: 1em;
+  flex: 0 0 auto;
+}
+
+[data-temporal-native-range] {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  flex-wrap: wrap;
+}
+
+.nuxt-temporal-native-range-host {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+/* Private adaptation of Nuxt/Reka's flat range segments. Container allocation,
+   not device identity or current boundary mode, selects the two-row layout. */
+[data-temporal-range][data-temporal-kind='datetime'] {
+  container: nuxt-datetime-range / inline-size;
+}
+@container nuxt-datetime-range (max-width: 36em) {
+  [data-temporal-native-range] {
+    display: grid;
+    grid-template-columns: 1em;
+    grid-auto-columns: max-content;
+    grid-template-rows: repeat(2, minmax(1lh, auto));
+    column-gap: 0;
+    row-gap: 0.25em;
+    justify-content: start;
+  }
+  [data-temporal-native-range] > [data-reka-date-range-field-segment-type] {
+    grid-column: var(--ui-temporal-column);
+  }
+  [data-temporal-native-range]
+    > [data-reka-date-range-field-segment-type='start'] {
+    grid-row: 1;
+  }
+  [data-temporal-native-range]
+    > [data-reka-date-range-field-segment-type='end'] {
+    grid-row: 2;
+  }
+  [data-temporal-native-range] > [data-slot='separatorIcon'] {
+    grid-area: 2 / 1;
+    margin-inline: 0;
+    max-inline-size: 1em;
+  }
+  .nuxt-ui-temporal-range,
+  .nuxt-ui-temporal-range[data-open] {
+    display: grid;
+    grid-template-columns: 1em minmax(0, max-content) minmax(0, 1fr);
+    grid-template-rows: repeat(2, minmax(1lh, auto));
+    column-gap: 0;
+    row-gap: 0.25em;
+  }
+  [data-temporal-infinity] {
+    font: inherit;
+    padding-block: 0;
+  }
+  .nuxt-ui-temporal-boundary {
+    justify-self: start;
+    max-inline-size: 100%;
+  }
+  [data-temporal-side='start'] {
+    grid-area: 1 / 2;
+  }
+  [data-temporal-side='end'] {
+    grid-area: 2 / 2;
+  }
+  [data-temporal-separator] {
+    grid-area: 2 / 1;
+  }
+  .nuxt-ui-temporal-spacer {
+    grid-area: 1 / 3 / 3 / 4;
+    justify-self: stretch;
+  }
+}
+
+/* Native mode arrows and the custom next-day symbol share one icon square. */
+.nuxt-ui-temporal-symbol {
+  display: inline-grid;
+  place-items: center;
+  position: relative;
+  flex: 0 0 auto;
+  inline-size: 1em;
+  block-size: 1em;
+  line-height: 1;
+}
+.nuxt-ui-temporal-symbol > svg {
+  inline-size: 1em;
+  block-size: 1em;
+}
+
+.nuxt-notice-icon {
+  display: inline-flex;
+}
+.nuxt-notice-icon > * {
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+/* Ordinary rich-content links remain readable on filled notices; explicit link components retain their own presentation. */
+.nuxt-notice[data-variant='filled'] :where(a[href]:not([class])) {
+  color: inherit;
+}
+
+/* UiField owns editor accessibility helpers. Keep their absolute boxes local
+   to this required composition, including when the field is deep in a scrollport.
+   Clip the helper itself; retain visible focus and popup overflow on the field. */
+.nuxt-strategy-field,
+.nuxt-field-group,
+.nuxt-field-editor {
+  position: relative;
+}
+.nuxt-select-status,
+.nuxt-required-description,
+.nuxt-tooltip-description,
+.nuxt-labels-hidden [data-slot='labelWrapper'] {
+  inset-block-start: 0;
+  inset-inline-start: 0;
+}
+
+/* Root navigation owns its edge unless an explicit navigation region adopts it. */
+.nuxt-ui-navigation-surface {
+  box-sizing: border-box;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  position: relative;
+}
+.nuxt-ui-navigation-surface:not([data-navigation-mode='horizontal']) {
+  inline-size: max-content;
+}
+.nuxt-ui-navigation-surface[data-navigation-mode='horizontal'] {
+  inline-size: 100%;
+}
+.nuxt-ui-navigation-surface[data-navigation-mode='vertical-tree'] {
+  inline-size: 100%;
+}
+.nuxt-ui-navigation-surface[data-navigation-boundary='inline-end'] {
+  border-inline-end: 1px solid var(--ui-border);
+}
+.nuxt-ui-navigation-surface[data-navigation-boundary='inline-start'] {
+  border-inline-start: 1px solid var(--ui-border);
+}
+.nuxt-ui-navigation-surface[data-navigation-boundary='block-end'],
+.nuxt-navbar[data-navigation-boundary='block-end'] {
+  border-block-end: 1px solid var(--ui-border);
+}
+.nuxt-ui-navigation-surface[data-navigation-boundary='block-start'],
+.nuxt-navbar[data-navigation-boundary='block-start'] {
+  border-block-start: 1px solid var(--ui-border);
+}
+.nuxt-navbar[data-navigation-boundary='none'] {
+  border-block: 0;
+}
+.nuxt-navbar-links > .nuxt-ui-navigation-surface {
+  align-self: stretch;
+}
+.nuxt-ui-navigation-hint {
+  position: fixed;
+  max-inline-size: min(12rem, calc(100vw - 1rem));
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--ui-border);
+  border-radius: 0.25rem;
+  background: var(--ui-bg);
+  color: var(--ui-text);
+  pointer-events: none;
+  overflow-wrap: anywhere;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nuxt-ui-navigation-surface * {
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+  }
+}
+.nuxt-navigation-vertical[data-rail] [data-entry-key] {
+  padding-inline: calc(var(--spacing) * 2.5);
+  min-block-size: calc(var(--spacing) * 8);
+}
+.nuxt-navigation-vertical[data-rail] {
+  inline-size: calc(var(--spacing) * 10);
+}
+
+.nuxt-ui-navigation-surface [data-rail-heading] {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  inline-size: 1px;
+  block-size: 1px;
+  min-block-size: 0;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.nuxt-navbar-links > .nuxt-ui-navigation-surface {
+  display: flex;
+  align-items: center;
+}
+
+.nuxt-navbar[data-navigation-boundary='block-start'] {
+  border-block-end: 0;
+}
+
+/* The complete region receives drops but never becomes a scrollport.
+   Host allocations must respect the backend minimum for its controls. */
+.nuxt-ui-upload-region {
+  position: relative;
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-inline-size: 14rem;
+  block-size: 10rem;
+  min-block-size: 8rem;
+  overflow: clip;
+  overflow-wrap: anywhere;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+  justify-content: safe center;
+}
+.nuxt-ui-upload-region[data-extent='compact'] {
+  block-size: 8rem;
+}
+.nuxt-ui-upload-region[data-extent='large'] {
+  block-size: 16rem;
+}
+.nuxt-ui-upload-region[data-extent='fill'] {
+  block-size: 100%;
+}
+.nuxt-ui-upload-region > * {
+  flex-shrink: 0;
+  min-inline-size: 0;
+}
+.nuxt-ui-upload-region > [data-upload-choose] {
+  align-self: flex-start;
+  max-inline-size: 100%;
+  white-space: normal;
+}
+.nuxt-ui-upload-region[aria-disabled='true'] {
+  /* The drop boundary remains identifiable when the native opacity change
+     alone is subtle against the surrounding page. Keep theme-owned colors. */
+  background-color: var(--ui-bg-muted);
+}
+.nuxt-ui-upload-feedback,
+.nuxt-ui-upload-name {
+  min-inline-size: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+/* A failed acquisition shows one error and recovery actions, not a second
+   filename row. The accepted preview keeps its own identity when present. */
+.nuxt-ui-upload-region:is(
+    [data-upload-phase='ready'],
+    [data-upload-phase='delivery-failed']
+  )[data-upload-recovery]
+  > .nuxt-ui-upload-name {
+  display: none;
+}
+.nuxt-ui-upload-feedback:empty {
+  display: none;
+}
+.nuxt-ui-upload-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.nuxt-ui-upload-actions > * {
+  max-inline-size: 100%;
+  white-space: normal;
+  margin: 0;
+}
+.nuxt-ui-upload-progress {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  inline-size: 100%;
+  gap: 0.75rem;
+  min-inline-size: 0;
+}
+.nuxt-ui-upload-progress > .upload-progress-name {
+  grid-column: 1 / -1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: start;
+}
+.nuxt-ui-upload-progress > .upload-progress-body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+.nuxt-ui-upload-progress .upload-progress-context {
+  flex: 1 1 8em;
+  min-inline-size: 0;
+}
+.nuxt-ui-upload-progress[data-recovery],
+.nuxt-ui-upload-progress[data-recovery] > .upload-progress-body {
+  row-gap: 0.25rem;
+}
+.nuxt-ui-upload-progress > * {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+.nuxt-ui-upload-remove-icon,
+.nuxt-ui-upload-region .upload-remove-icon {
+  inline-size: 1em;
+  block-size: 1em;
+  margin-inline-end: 0;
+}
+
+.nuxt-ui-upload-region .upload-required-description,
+.nuxt-ui-upload-progress .upload-announcement {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* UFileUpload supplies the area/spacing/theme classes and UAvatar artwork.
+   Its private chooser is a real button; the surrounding area is a group. */
+.nuxt-ui-upload-region > .nuxt-ui-upload-choose {
+  align-self: stretch;
+  inline-size: 100%;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+/* Native area and wrapper padding stack; compact/fill must fit at the minimum. */
+.nuxt-ui-upload-region:is([data-extent='compact'], [data-extent='fill'])
+  > .nuxt-ui-upload-choose {
+  padding-block: 0;
+}
+.nuxt-ui-upload-choose:disabled {
+  cursor: default;
+}
+.nuxt-ui-upload-choose:focus-visible {
+  /* Generated FileUpload focus utilities paint on the containing area. */
+  outline: none;
+}
+@media (forced-colors: active) {
+  .nuxt-ui-upload-region:focus-visible,
+  .nuxt-ui-upload-region:has(> .nuxt-ui-upload-choose:focus-visible) {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+}
+
+/* Recovery uses a file/error summary and one row of available actions. */
+.nuxt-ui-upload-region:is(
+    [data-upload-phase='ready'],
+    [data-upload-phase='delivery-failed']
+  )[data-upload-recovery] {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: safe center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+}
+.nuxt-ui-upload-region[data-upload-recovery] > .nuxt-ui-upload-name,
+.nuxt-ui-upload-region[data-upload-recovery] > .nuxt-ui-upload-feedback {
+  flex-basis: 100%;
+}
+.nuxt-ui-upload-region[data-upload-recovery] > [data-upload-choose],
+.nuxt-ui-upload-region[data-upload-recovery] > .nuxt-ui-upload-actions {
+  order: 1;
+  inline-size: auto;
+  flex: 0 1 auto;
+}
+
+/* File identity above one progress/action row; retained summary beside removal. */
+.nuxt-ui-upload-region:is(
+  [data-upload-phase='validating'],
+  [data-upload-phase='uploading'],
+  [data-upload-phase='delivering']
+) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-content: safe center;
+  align-items: center;
+}
+.nuxt-ui-upload-region > .nuxt-ui-upload-name {
+  grid-column: 1 / -1;
+}
+.nuxt-ui-upload-region > .nuxt-ui-upload-progress {
+  grid-column: 1;
+}
+.nuxt-ui-upload-region > .nuxt-ui-upload-actions {
+  grid-column: 2;
+}
+/* Two independent placements in one grid area: centered content and end action.
+   Equal content gutters protect the action without moving the content's center. */
+.nuxt-ui-upload-region[data-upload-phase='occupied'] {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
+  align-content: stretch;
+  align-items: center;
+}
+.nuxt-ui-upload-region[data-upload-phase='occupied']
+  > :is(.nuxt-ui-upload-preview, .nuxt-ui-upload-name) {
+  grid-area: 1 / 1;
+  box-sizing: border-box;
+  inline-size: 100%;
+  padding-inline: 3.5rem;
+  text-align: center;
+}
+.nuxt-ui-upload-region[data-upload-phase='occupied'] > .nuxt-ui-upload-actions {
+  grid-area: 1 / 1;
+  justify-self: end;
+}
+.nuxt-ui-upload-region[data-upload-phase='occupied']
+  > .nuxt-ui-upload-feedback {
+  grid-area: 2 / 1;
+}
+
+/* Image-only presentation: the host supplies bounds; no frame, caption or clipping. */
+.nuxt-ui-image-preview {
+  display: inline-grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  vertical-align: middle;
+  box-sizing: border-box;
+  min-inline-size: 0;
+  min-block-size: 0;
+  max-inline-size: 100%;
+  max-block-size: 100%;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.nuxt-ui-image-preview > * {
+  grid-area: 1 / 1;
+  min-inline-size: 0;
+  min-block-size: 0;
+  max-inline-size: 100%;
+  max-block-size: 100%;
+}
+.nuxt-ui-image-preview img {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: var(--ui-image-fit, contain);
+  object-position: center;
+  border: 0;
+  border-radius: 0;
+}
+.nuxt-ui-image-preview-broken {
+  display: grid;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  place-items: center;
+  inline-size: 100%;
+  block-size: 100%;
+}
+.nuxt-ui-image-preview-broken svg {
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  max-inline-size: 100%;
+  max-block-size: 100%;
+}
+.nuxt-ui-upload-preview {
+  display: grid;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  place-items: center;
+  block-size: 100%;
+  min-block-size: 0;
+  min-inline-size: 0;
+}
+
+/* Read-only field frame; the preview renderer remains borderless. */
+.nuxt-ui-preview-region {
+  display: block;
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+.nuxt-ui-preview-viewport {
+  display: grid;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  place-items: center;
+  box-sizing: border-box;
+  block-size: 10rem;
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: 0;
+  overflow: hidden;
+}
+.nuxt-ui-preview-region[data-extent='compact'] > .nuxt-ui-preview-viewport {
+  block-size: 6rem;
+}
+.nuxt-ui-preview-region[data-extent='large'] > .nuxt-ui-preview-viewport {
+  block-size: 16rem;
+}
+.nuxt-ui-preview-viewport > * {
+  min-inline-size: 0;
+  min-block-size: 0;
+  max-inline-size: 100%;
+  max-block-size: 100%;
+}
+
+/* Transfer recovery belongs to the reusable upload presentation. */
+.nuxt-ui-upload-progress .upload-progress-actions {
+  align-self: start;
+  display: flex;
+  gap: 0.5rem;
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  margin-inline-start: auto;
+}
+.nuxt-ui-upload-progress .upload-transfer-issue {
+  display: block;
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+  color: var(--ui-error);
+}
+/* A standalone transfer shows the complete error. The bounded acquisition
+   region keeps its concise summary without growing or becoming scrollable. */
+.nuxt-ui-upload-region .nuxt-ui-upload-progress .upload-transfer-issue {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nuxt-ui-upload-region[data-upload-recovery] {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+}
+.nuxt-ui-upload-region[data-upload-recovery] > [data-upload-choose] {
+  grid-column: 1;
+  order: 0;
+}
+.nuxt-ui-upload-region[data-upload-recovery] > .nuxt-ui-upload-progress {
+  grid-column: 2;
+}
+.nuxt-ui-upload-region[data-upload-recovery] > .nuxt-ui-upload-feedback {
+  grid-column: 1 / -1;
+}
+
+/* Coordinate the chooser with identity, leaving the complete lower row for
+   transfer feedback and recovery actions. This is private backend composition. */
+.nuxt-ui-upload-region:has(> .nuxt-ui-upload-progress[data-recovery]) {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  row-gap: 0.25rem;
+}
+.nuxt-ui-upload-region:has(> .nuxt-ui-upload-progress[data-recovery])
+  > [data-upload-choose] {
+  grid-area: 1 / 1;
+  z-index: 1;
+}
+.nuxt-ui-upload-region > .nuxt-ui-upload-progress[data-recovery] {
+  grid-area: 1 / 1 / 3 / -1;
+  grid-template-columns: subgrid;
+  grid-template-rows: subgrid;
+}
+.nuxt-ui-upload-region
+  > .nuxt-ui-upload-progress[data-recovery]
+  > .upload-progress-name {
+  grid-area: 1 / 2;
+}
+.nuxt-ui-upload-region
+  > .nuxt-ui-upload-progress[data-recovery]
+  > .upload-progress-body {
+  grid-area: 2 / 1 / 3 / -1;
+}
+.nuxt-ui-upload-progress .upload-progress-actions > * {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.nuxt-ui-upload-recovery-icon {
+  inline-size: 1.25em;
+  block-size: 1.25em;
+}
+
+/* Navigation's floating viewport must escape sibling region stacking contexts.
+   Only the actual viewport receives pointers; spare root width stays transparent. */
+.nuxt-navigation-viewport-wrapper {
+  display: flex;
+  pointer-events: none;
+}
+.nuxt-navigation-viewport-wrapper > [data-state='open'] {
+  pointer-events: auto;
+}
+
+/* Collections own each overflow axis separately. Full height is allocated
+   by the parent; content height never creates a vertical scrollbar. */
+.nuxt-collection {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  box-sizing: border-box;
+  overflow-x: clip;
+  overflow-y: visible;
+}
+.nuxt-collection[data-full] {
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.nuxt-collection[data-scroll='horizontal'],
+.nuxt-collection[data-scroll='both'] {
+  overflow-x: auto;
+}
+.nuxt-collection[data-scroll='horizontal'] {
+  overflow-y: hidden;
+}
+.nuxt-list {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nuxt-list > li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  min-width: 0;
+}
+.nuxt-list > li[data-selectable] {
+  grid-template-columns: max-content minmax(0, 1fr);
+  column-gap: 0.5rem;
+}
+.nuxt-list-selection {
+  display: flex;
+  align-items: flex-start;
+  justify-self: start;
+}
+.nuxt-list-content {
+  min-width: 0;
+}
+.nuxt-collection-status,
+.nuxt-table th {
+  position: relative;
+}
+.nuxt-collection-status[data-infinity-feedback] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding-block: 0.5rem;
+  text-align: center;
+  color: var(--ui-text-dimmed);
+  font-size: 0.875em;
+}
+.nuxt-collection-status p {
+  margin-block: 0.5rem;
+}
+.nuxt-collection-status[data-infinity-feedback] p {
+  margin: 0;
+}
+.nuxt-collection-announcement {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.nuxt-collection-sentinel {
+  height: 1px;
+}
+.nuxt-paginator {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+.nuxt-paginator-size {
+  min-width: 6rem;
+  max-width: 12rem;
+}
+
+/* Column allocation and resize affordances belong to the table backend. */
+.nuxt-collection[data-column-fit] {
+  min-width: 0;
+  max-width: 100%;
+}
+.nuxt-table th,
+.nuxt-table td {
+  position: relative;
+  box-sizing: border-box;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.nuxt-column-resizer {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  width: 0.5rem;
+  cursor: col-resize;
+  touch-action: none;
+  user-select: none;
+}
+.nuxt-column-resizer::after {
+  content: '';
+  position: absolute;
+  inset-block: 20%;
+  inset-inline-end: 0;
+  border-inline-end: 1px solid currentColor;
+  opacity: 0.35;
+}
+.nuxt-column-resizer:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -2px;
+}
+
+/* Shared modal allocation retains native viewport clearance. */
+.nuxt-modal {
+  --uninterface-modal-edge-clearance: 1rem;
+}
+
+.nuxt-table-footer {
+  position: sticky;
+  inset-inline-start: 0;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* UTable's native sticky header uses the named collection scrollport. */
+.nuxt-collection .nuxt-table {
+  overflow-x: visible;
+  overflow-y: visible;
+}
+
+.nuxt-paginator-jumper {
+  position: relative;
+  width: max-content;
+  max-width: 100%;
+}
+
+/* Collection frames own selection; no checkbox sits outside the card. */
+.nuxt-collection-cards {
+  --ui-collection-card-default-min: 20rem;
+  --ui-collection-card-default-max: 25rem;
+  --ui-collection-card-min: var(--ui-collection-card-default-min);
+  --ui-collection-card-max: var(--ui-collection-card-default-max);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nuxt-collection-cards[data-grid] {
+  justify-content: start;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(
+      min(100%, var(--ui-collection-card-min)),
+      min(100%, var(--ui-collection-card-max))
+    )
+  );
+}
+.nuxt-collection-cards > li {
+  min-width: 0;
+}
+.nuxt-card[data-collection-selected] {
+  outline: 2px solid var(--ui-primary);
+  outline-offset: -2px;
+}
+.nuxt-collection-card-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+.nuxt-collection-card-selection,
+.nuxt-collection-card-leading {
+  flex: none;
+  display: flex;
+  align-items: center;
+}
+.nuxt-collection-card-title {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.nuxt-collection-card-indicators,
+.nuxt-collection-card-overlay {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+.nuxt-collection-card-indicators {
+  margin-inline-start: auto;
+}
+.nuxt-collection-card-media {
+  position: relative;
+  min-width: 0;
+}
+.nuxt-collection-card-overlay {
+  position: absolute;
+  inset-block-start: 0.5rem;
+  inset-inline-end: 0.5rem;
+  max-width: calc(100% - 1rem);
+}
+.nuxt-collection-card-details {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+}
+.nuxt-collection-card-details > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: 0.5rem;
+}
+.nuxt-collection-card-details dt {
+  font-weight: 600;
+}
+.nuxt-collection-card-details dd {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.nuxt-collection-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+/* The owner supplies the loading surface; only the overlay is clipped. */
+.nuxt-loading-region {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border-radius: inherit;
+  overflow-x: clip;
+  overflow-y: clip;
+  pointer-events: auto;
+}
+.nuxt-loading-indicator {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  vertical-align: middle;
+}
+.nuxt-loading-label-hidden {
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.nuxt-loading-region {
+  background: color-mix(in srgb, var(--ui-bg) 80%, transparent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .nuxt-loading-indicator .animate-spin {
+    animation: none;
+  }
+}
+
+/* Live activity is outside busy/inert content and cannot enlarge a scrollport. */
+.nuxt-loading-announcement {
+  position: fixed;
+  inset: 0 auto auto 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* An unbounded, initially empty collection still needs a visible loading surface. */
+.nuxt-collection[data-loading-empty]:not([data-full]) {
+  min-height: 4rem;
+}
+
+/* The collection owns a supporting failure region outside the data scrollport. */
+.nuxt-collection-frame {
+  min-width: 0;
+  min-height: 0;
+}
+.nuxt-collection-frame[data-collection-full] {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.nuxt-collection-frame[data-collection-full] > .nuxt-collection {
+  flex: 1;
+  height: auto;
+}
+.nuxt-collection-failure {
+  min-width: 0;
+  flex: none;
+}
+.nuxt-collection-failure[data-collection-failure='replacement'] {
+  margin-block-end: 0.5rem;
+}
+.nuxt-collection-failure[data-collection-failure='append'] {
+  margin-block-start: 0.5rem;
+}
+
+.nuxt-notice {
+  --nuxt-notice-max-action-hang: 100vw;
+}
+
+/* Hang the leading text action padding into the notice inset. Move the row
+   together so native hit targets, focus paint, wrapping and peer gaps survive. */
+.nuxt-notice-actions:has(
+  > .nuxt-button-host:first-child > [data-ui-button-variant='text']
+) {
+  margin-inline-start: max(
+    calc(-1 * var(--nuxt-notice-action-inset, calc(var(--spacing) * 2.5))),
+    calc(-1 * var(--nuxt-notice-max-action-hang, 100vw))
+  );
+}
+.nuxt-notice-actions:has(
+  > .nuxt-button-host:first-child > [data-ui-button-variant='text'].px-2
+) {
+  margin-inline-start: max(
+    calc(-1 * var(--nuxt-notice-action-inset, calc(var(--spacing) * 2))),
+    calc(-1 * var(--nuxt-notice-max-action-hang, 100vw))
+  );
+}
+.nuxt-notice-actions:has(
+  > .nuxt-button-host:first-child > [data-ui-button-variant='text'].px-3
+) {
+  margin-inline-start: max(
+    calc(-1 * var(--nuxt-notice-action-inset, calc(var(--spacing) * 3))),
+    calc(-1 * var(--nuxt-notice-max-action-hang, 100vw))
+  );
+}
+
+/* Without an icon column, keep the target and focus inside the frame. */
+.nuxt-notice:not(:has(> .nuxt-notice-icon)) {
+  --nuxt-notice-max-action-hang: calc(var(--spacing) * 4 - 3px);
+}
+
+/* Drawer and popover integration: native surfaces, bounded inner scrolling,
+   logical edges, and no allocation while hidden. No business CSS is required. */
+.nuxt-overlay {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  width: min(26rem, calc(100vw - 2rem));
+  max-width: calc(100vw - 2rem);
+  max-height: calc(100dvh - 2rem);
+  overflow: visible;
+  transform: none;
+}
+.nuxt-overlay:not([open]):not(:popover-open) {
+  display: none;
+}
+.nuxt-overlay[open],
+.nuxt-overlay:popover-open {
+  display: flex;
+  visibility: visible;
+  flex-direction: column;
+}
+/* Drawers meet the viewport; safe-area padding belongs inside the surface. */
+.nuxt-overlay[data-ui-overlay='drawer'] {
+  inset-block: 0;
+  height: 100dvh;
+  width: min(26rem, 100vw);
+  max-width: 100vw;
+  max-height: 100dvh;
+  max-block-size: 100dvh;
+  --drawer-slide-x: 0%;
+  --drawer-slide-y: 0%;
+}
+.nuxt-overlay[data-ui-overlay='drawer'] > .nuxt-overlay-content {
+  max-block-size: 100%;
+  border-radius: inherit;
+  overflow: hidden;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+.nuxt-overlay[data-ui-overlay='drawer'][data-edge='start'] {
+  inset-inline-start: 0;
+  --drawer-slide-x: -100%;
+}
+.nuxt-overlay[data-ui-overlay='drawer'][data-edge='end'] {
+  inset-inline-end: 0;
+  --drawer-slide-x: 100%;
+}
+.nuxt-overlay[data-ui-overlay='drawer'][data-edge='start']:dir(rtl) {
+  --drawer-slide-x: 100%;
+}
+.nuxt-overlay[data-ui-overlay='drawer'][data-edge='end']:dir(rtl) {
+  --drawer-slide-x: -100%;
+}
+.nuxt-overlay[data-ui-overlay='drawer']:is(
+    [data-edge='top'],
+    [data-edge='bottom']
+  ) {
+  inset-inline: 0;
+  width: auto;
+  height: min(28rem, 100dvh);
+}
+.nuxt-overlay[data-ui-overlay='drawer'][data-edge='top'] {
+  inset-block-end: auto;
+  --drawer-slide-y: -100%;
+}
+.nuxt-overlay[data-ui-overlay='drawer'][data-edge='bottom'] {
+  inset-block-start: auto;
+  --drawer-slide-y: 100%;
+}
+.nuxt-overlay.nuxt-drawer-enter-active,
+.nuxt-overlay.nuxt-drawer-leave-active {
+  transition: transform 200ms var(--ease-out, ease-out);
+}
+.nuxt-overlay.nuxt-drawer-enter-from,
+.nuxt-overlay.nuxt-drawer-leave-to {
+  transform: translate(var(--drawer-slide-x), var(--drawer-slide-y));
+}
+/* Vaul supplies gestures; the shared surface lifecycle owns entry/exit motion.
+   Drawer slots retain native exposed corners and handle placement. */
+.nuxt-overlay[data-vaul-drawer] {
+  transition: transform 200ms var(--ease-out, ease-out);
+  user-select: auto;
+  touch-action: auto;
+}
+.nuxt-overlay[data-vaul-drawer-direction='right']:dir(rtl),
+.nuxt-overlay[data-vaul-drawer-direction='left'] {
+  flex-direction: row-reverse;
+}
+.nuxt-overlay[data-vaul-drawer-direction='left']:dir(rtl),
+.nuxt-overlay[data-vaul-drawer-direction='right'] {
+  flex-direction: row;
+}
+.nuxt-overlay[data-vaul-drawer-direction='top'] {
+  flex-direction: column-reverse;
+}
+.nuxt-overlay[data-vaul-drawer] header {
+  touch-action: none;
+}
+.nuxt-overlay [data-vaul-handle] {
+  flex: none;
+  touch-action: none;
+}
+.nuxt-overlay [data-vaul-handle][data-disabled] {
+  pointer-events: none;
+}
+.nuxt-overlay[data-vaul-drawer] [data-vaul-no-drag] {
+  touch-action: pan-x pan-y;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nuxt-overlay[data-vaul-drawer] {
+    transition: none !important;
+  }
+}
+/* Native overlay fades also start correctly after showModal/focus. */
+@keyframes nuxt-drawer-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes nuxt-drawer-backdrop-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+.nuxt-overlay[aria-modal='true'].nuxt-drawer-enter-active::backdrop {
+  animation: nuxt-drawer-backdrop-in 200ms var(--ease-out, ease-out) both;
+}
+.nuxt-overlay[aria-modal='true'].nuxt-drawer-leave-active::backdrop {
+  animation: nuxt-drawer-backdrop-out 200ms var(--ease-out, ease-out) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nuxt-overlay.nuxt-drawer-enter-active,
+  .nuxt-overlay.nuxt-drawer-leave-active {
+    transition: none;
+  }
+  .nuxt-overlay[aria-modal='true'].nuxt-drawer-enter-active::backdrop,
+  .nuxt-overlay[aria-modal='true'].nuxt-drawer-leave-active::backdrop {
+    animation: none;
+  }
+}
+.nuxt-overlay[data-ui-overlay='popover'] {
+  width: min(24rem, calc(100vw - 1rem));
+  inset: auto;
+  margin: 0;
+}
+/* Header filters fit their business editor; positioning bounds the viewport. */
+.nuxt-overlay[data-ui-overlay='popover'][data-ui-column-filter-popover] {
+  width: max-content;
+}
+.nuxt-overlay-arrow {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+}
+.nuxt-overlay-arrow > svg {
+  position: absolute;
+  bottom: 0;
+  display: block;
+}
+.nuxt-overlay[data-side='top'] > .nuxt-overlay-arrow {
+  bottom: -5px;
+}
+.nuxt-overlay[data-side='bottom'] > .nuxt-overlay-arrow {
+  top: -5px;
+  transform: rotate(180deg);
+}
+.nuxt-overlay[data-side='left'] > .nuxt-overlay-arrow {
+  right: -5px;
+  transform: rotate(-90deg);
+}
+.nuxt-overlay[data-side='right'] > .nuxt-overlay-arrow {
+  left: -5px;
+  transform: rotate(90deg);
+}
+.nuxt-overlay > .nuxt-overlay-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  max-height: inherit;
+  width: 100%;
+  box-sizing: border-box;
+}
+.nuxt-overlay-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.nuxt-overlay-heading > :last-child:not(h2) {
+  margin-inline-start: auto;
+}
+.nuxt-overlay-heading > h2 {
+  margin: 0;
+  font-size: inherit;
+  font-weight: 600;
+}
+.nuxt-overlay > .nuxt-overlay-content > header,
+.nuxt-overlay > .nuxt-overlay-content > footer {
+  flex: none;
+}
+.nuxt-overlay > .nuxt-overlay-content > [role='region'] {
+  min-height: 0;
+  overflow: auto;
+  flex: 1;
+}
+.nuxt-overlay > .nuxt-overlay-content > [role='region']:focus-visible {
+  outline-offset: -2px;
+}
+.nuxt-overlay {
+  border: 0;
+  color: var(--ui-text);
+  background: var(--ui-bg);
+}
+.nuxt-overlay::backdrop {
+  background: rgb(0 0 0 / 50%);
+}
+/* Native Slideover/Drawer overlay: bg-elevated/75, including theme changes. */
+.nuxt-overlay[data-ui-overlay='drawer'][aria-modal='true']::backdrop {
+  background: color-mix(in oklab, var(--ui-bg-elevated) 75%, transparent);
+}
+
+.nuxt-overlay:not([aria-modal='true'])::backdrop {
+  background: transparent;
+  backdrop-filter: none;
+  pointer-events: none;
+}
+
+.nuxt-overlay[data-ui-overlay='drawer']:is(
+    [data-edge='start'],
+    [data-edge='end']
+  ) {
+  width: min(28rem, 100vw);
+}
+
+/* Field peers anchor at their first row; editor/feedback growth goes down.
+   Bare actions retain the navbar's centered treatment. */
+.nuxt-navbar-actions > .nuxt-strategy-field,
+.nuxt-navbar-actions > .nuxt-field-group {
+  align-self: flex-start;
+}
+
+/* Managed feedback viewport: theme spacing, bounded scrolling and independent items. */
+.nuxt-feedback-viewport {
+  position: fixed;
+  inset-inline-end: 0;
+  top: 0;
+  inline-size: min(26rem, 100vw);
+  padding: 1rem;
+  max-block-size: 100dvh;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  overflow: auto;
+  overscroll-behavior: contain;
+  pointer-events: none;
+}
+.nuxt-feedback-viewport:empty {
+  display: none;
+}
+.nuxt-feedback-viewport[data-placement^='bottom'] {
+  top: auto;
+  bottom: 0;
+}
+.nuxt-feedback-viewport[data-placement$='start'] {
+  inset-inline-start: 0;
+  inset-inline-end: auto;
+}
+.nuxt-feedback-viewport[data-placement$='center'] {
+  inset-inline-start: 50%;
+  inset-inline-end: auto;
+  transform: translateX(-50%);
+}
+.nuxt-feedback-viewport > * {
+  flex: none;
+  pointer-events: auto;
+  max-inline-size: 100%;
+}
+.nuxt-feedback-item {
+  position: relative;
+  overflow-wrap: anywhere;
+}
+/* The notification's scroll region represents focus on the delivery itself.
+   Controls inside it own their focus cues; only direct region focus qualifies.
+   Use an outline so application-owned rings/shadows cannot erase this cue. */
+.nuxt-feedback-item [data-ui-managed-feedback]:focus-visible,
+.nuxt-notification:has(
+  > [data-slot='body'] > .nuxt-notification-content:focus-visible
+) {
+  outline: 3px solid color-mix(in oklab, var(--ui-primary) 25%, transparent);
+  outline-offset: 2px;
+}
+.nuxt-feedback-viewport:focus-visible {
+  outline: 3px solid color-mix(in oklab, var(--ui-primary) 25%, transparent);
+  outline-offset: -3px;
+}
+@media (forced-colors: active) {
+  .nuxt-feedback-item [data-ui-managed-feedback]:focus-visible,
+  .nuxt-notification:has(
+    > [data-slot='body'] > .nuxt-notification-content:focus-visible
+  ),
+  .nuxt-feedback-viewport:focus-visible {
+    outline: 2px solid Highlight;
+  }
+}
+.nuxt-notification {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+  max-block-size: calc(100dvh - 2rem);
+  box-shadow:
+    0 0 0 1px var(--ui-border-accented),
+    var(--uninterface-notification-shadow, 0 10px 28px rgb(0 0 0 / 28%));
+}
+.nuxt-notification-title {
+  min-inline-size: 0;
+  align-self: center;
+  color: var(--nuxt-notification-color, inherit);
+}
+.nuxt-notification-content {
+  min-block-size: 0;
+  min-inline-size: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+/* Its visible focus indicator is painted on the enclosing notification above. */
+.nuxt-notification-content:focus-visible {
+  outline: none;
+}
+.nuxt-notification-progress {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+.nuxt-notification-enter-active,
+.nuxt-notification-leave-active {
+  transition:
+    opacity 150ms ease,
+    transform 150ms ease;
+}
+.nuxt-notification-enter-from,
+.nuxt-notification-leave-to {
+  opacity: 0;
+  transform: translateY(var(--nuxt-notification-enter-offset));
+}
+@media (prefers-reduced-motion: reduce) {
+  .nuxt-notification-enter-active,
+  .nuxt-notification-leave-active {
+    transition: none;
+  }
+}
+.nuxt-feedback-announcement {
+  position: absolute;
+  inset: 0 auto auto 0;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Side-region navbars stack by orientation, independently of available width. */
+.nuxt-navbar[data-navbar-orientation='vertical'] {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  justify-content: flex-start;
+  border-block: 0;
+}
+.nuxt-navbar[data-navbar-orientation='vertical'] > .nuxt-navbar-links {
+  flex: 0 1 auto;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.nuxt-navbar[data-navbar-orientation='vertical'] > .nuxt-navbar-actions {
+  margin-inline-start: 0;
+}
+.nuxt-navbar[data-navbar-orientation='vertical'][data-navigation-boundary='inline-start'] {
+  border-inline-start: 1px solid var(--ui-border);
+}
+.nuxt-navbar[data-navbar-orientation='vertical'][data-navigation-boundary='inline-end'] {
+  border-inline-end: 1px solid var(--ui-border);
+}
+
+/* Keep Nuxt's documented ghost header control, but inherit table typography. */
+.nuxt-table-sort {
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+  margin-inline: -0.625rem;
+}
+.nuxt-table-sort-icon {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+}
+
+/* Compact column filter affordance; popup content has its own layout. */
+.nuxt-table-filter .table-filter-icon {
+  display: block;
+  width: 1em;
+  height: 1em;
+}
+
+.nuxt-table-header {
+  align-items: center;
+  max-width: 100%;
+}
+.nuxt-table-header > .nuxt-table-sort {
+  min-width: 0;
+}
+.nuxt-table-header:has(.nuxt-table-filter) > .nuxt-table-sort {
+  margin-inline-end: 0;
+}
+.nuxt-table-filter {
+  flex-shrink: 0;
+}
+
+/* Admitted ordinary editors divide the shared surface without owning its edge. */
+.nuxt-frame-text-editor {
+  flex: 1 1 5ch;
+  min-inline-size: var(
+    --ui-text-min-width,
+    min(3ch, var(--ui-text-max-width, 3ch))
+  );
+  inline-size: 5ch;
+  max-inline-size: min(100%, var(--ui-text-max-width, 100%));
+}
+
+.nuxt-button-host[data-ui-control-frame='parent'] > button {
+  padding-block: 0;
+  min-block-size: 1.5em;
+  font-size: inherit;
+}
+.nuxt-frame-text-editor > input {
+  padding-block: 0;
+  padding-inline: 0;
+  box-shadow: none;
+  outline: none;
+  background: transparent;
+}
+
+/* Auto margin receives space only after growing editors reach their caps. */
+.nuxt-ui-input-frame-spacer {
+  display: block;
+  flex: 0 0 0;
+  inline-size: 0;
+  min-inline-size: 0;
+  margin-inline-start: auto;
+  pointer-events: none;
+}
+
+.nuxt-text-input-context {
+  display: contents;
+}
+
+/* Export the first editable row, not a leading decoration, as the frame baseline.
+   Native minimum-height space stays around the line; icons/actions stay centered. */
+.nuxt-input-frame {
+  align-content: center;
+}
+.nuxt-frame-text-editor {
+  align-self: baseline;
+}
+
+.nuxt-button {
+  flex-wrap: wrap;
+  align-content: center;
+}
+.nuxt-button-label:not(.nuxt-button-label-hidden) {
+  align-self: baseline;
+}
+
+/* Row allocation and row alignment are independent. Slot wrappers stay keyed. */
+.nuxt-collection-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  column-gap: calc(var(--spacing, 0.25rem) * 2);
+  row-gap: 0;
+  inline-size: 100%;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  flex: 0 0 auto;
+}
+.nuxt-collection-footer > [data-footer-part] {
+  flex: 0 1 auto;
+  inline-size: max-content;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+.nuxt-collection-footer
+  > [data-footer-part]:not([data-footer-row='0']):not([data-footer-row='-1']) {
+  margin-block-start: calc(var(--spacing, 0.25rem) * 2);
+}
+.nuxt-collection-footer > .nuxt-collection-footer-break {
+  flex: 0 0 100%;
+  block-size: 0;
+  min-block-size: 0;
+}
+.nuxt-collection-footer > .nuxt-collection-footer-info {
+  color: var(--ui-text-muted);
+  font-size: 0.875rem;
+  overflow-wrap: anywhere;
+  flex-grow: 1;
+}
+.nuxt-collection-footer > [data-navigation-start] {
+  margin-inline-start: auto;
+}
+.nuxt-collection-footer-paginator {
+  display: flex;
+  justify-content: flex-end;
+}
+.nuxt-paginator[data-compact] {
+  flex-wrap: nowrap;
+  gap: 0.25rem;
+}
+.nuxt-paginator-direction {
+  display: inline-block;
+}
+.nuxt-paginator-direction:dir(rtl) {
+  transform: scaleX(-1);
+}
+
+/* Five visible digit cells; native padding/borders are additional, never maxlength. */
+.nuxt-paginator-jumper input {
+  box-sizing: content-box;
+  inline-size: 5ch;
+  min-inline-size: 5ch;
+  flex: 0 0 auto;
+}
+.nuxt-paginator-jumper {
+  align-items: center;
+}
+
+/* Validation messages can wrap; UTooltip's default single-line height cannot. */
+.nuxt-field-failure-tooltip {
+  height: auto;
+  max-inline-size: min(24rem, calc(100vw - 1rem));
+  overflow-wrap: anywhere;
+}
+
+/* Collection intent groups use native controls; no competing table/query engine. */
+.nuxt-collection-header {
+  --collection-header-gap: calc(var(--spacing) * 3);
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  inline-size: 100%;
+  flex: 0 0 auto;
+}
+.nuxt-collection-header-primary,
+.nuxt-collection-header-part {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--collection-header-gap, calc(var(--spacing) * 3));
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+.nuxt-collection-header-primary {
+  inline-size: 100%;
+}
+.nuxt-collection-header-part {
+  flex: 0 1 auto;
+}
+.nuxt-collection-header-part > * {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+.nuxt-collection-header-part[data-separate] {
+  margin-inline-start: auto;
+}
+.nuxt-collection-header-part[data-new-row] {
+  flex-basis: 100%;
+  inline-size: 100%;
+}
+.nuxt-collection-header-part[data-grow] {
+  flex: 1 1 0;
+}
+.nuxt-collection-header-part[data-grow] > * {
+  inline-size: 100%;
+}
+.nuxt-collection-header-part[data-stacked] {
+  flex-direction: column;
+  align-items: stretch;
+}
+.nuxt-collection-header-part[data-contents] {
+  display: contents;
+}
+.nuxt-collection-header-primary[data-align-editors],
+.nuxt-collection-header-primary[data-align-editors]
+  .nuxt-collection-header-part {
+  align-items: flex-start;
+}
+.nuxt-collection-header [data-ui-header-aligned] {
+  padding-block-start: var(--ui-header-editor-offset, 0px);
+}
+
+/* Sort rules and Add sort share native-sized tracks without hidden controls. */
+.nuxt-collection-sort-layout {
+  min-inline-size: 0;
+}
+.nuxt-collection-sort-layout[data-sort-part='panel'] {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  gap: calc(var(--spacing) * 2);
+  align-items: center;
+  inline-size: 100%;
+}
+.nuxt-collection-sort-layout[data-sort-part='panel'][data-sort-multiple] {
+  grid-template-columns: max-content minmax(0, 1fr) max-content;
+}
+.nuxt-collection-sort-layout[data-sort-part='row'] {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+  align-items: center;
+}
+.nuxt-collection-sort-layout[data-sort-part='movement'] {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.nuxt-collection-sort-layout[data-sort-part='remove'] {
+  display: flex;
+  align-items: center;
+}
+.nuxt-collection-sort-layout[data-sort-part='add'] {
+  grid-column: 1;
+  justify-self: start;
+}
+.nuxt-collection-sort-layout[data-sort-part='panel'][data-sort-multiple]
+  > .nuxt-collection-sort-layout[data-sort-part='add'] {
+  grid-column: 2;
+}
+
+/* Private collection criterion badges: passive summary and native removal. */
+.nuxt-query-badge {
+  max-inline-size: 100%;
+  height: auto;
+  min-block-size: 0;
+}
+.nuxt-query-badge-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  min-inline-size: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.nuxt-query-badge-content [data-icon] {
+  flex-shrink: 0;
+}
+
+/* Source-query precedence participates in intrinsic header measurement. */
+.nuxt-table-sort-priority {
+  flex-shrink: 0;
+  font-size: 0.75em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Button width is independent of its containing layout allocation. */
+.nuxt-button-host[data-ui-button-width='full'] {
+  inline-size: 100%;
+}
+.nuxt-button-host[data-ui-button-width='content'] {
+  inline-size: fit-content;
+}
+
+/* Native outline supplies semantic hover tint and focus; neutral owns idle appearance. */
+.nuxt-button[data-ui-button-variant='neutral']:not(
+    :is(:hover, :focus-visible, :active)
+  ),
+.nuxt-button[data-ui-button-variant='neutral']:disabled {
+  color: var(--ui-text);
+  --tw-ring-color: var(--ui-border-accented);
+  background-color: var(--ui-bg);
+}
+
+/* A real flex line boundary lets actions join sorting without CSS reordering. */
+.nuxt-collection-header-part[data-line-break] {
+  flex: 0 0 100%;
+  block-size: 0;
+  min-block-size: 0;
+  margin-block: calc(var(--collection-header-gap) / -2);
+  padding: 0;
+}
+.nuxt-collection-header-part[data-header-part='actions'] {
+  align-self: flex-start;
+}
+
+/* Sort badge gestures keep native badge dimensions and independent removal. */
+.nuxt-query-badge {
+  position: relative;
+}
+.nuxt-query-badge-content[data-ui-sort-reorder] {
+  cursor: grab;
+  touch-action: pan-y pinch-zoom;
+  user-select: none;
+}
+.nuxt-query-badge-content[data-ui-sort-reorder]:focus-visible {
+  @apply outline-3 outline-inverted/25;
+  outline-offset: var(--nuxt-contained-focus-offset, 0px);
+  border-radius: 2px;
+}
+.nuxt-query-badge[data-ui-sort-dragging] {
+  opacity: 0.6;
+}
+.nuxt-query-badge[data-ui-sort-dragging] [data-ui-sort-reorder] {
+  cursor: grabbing;
+}
+.nuxt-query-badge[data-ui-sort-drop]::after {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inline-size: 2px;
+  background: currentColor;
+  pointer-events: none;
+}
+.nuxt-query-badge[data-ui-sort-drop='before']::after {
+  inset-inline-start: -3px;
+}
+.nuxt-query-badge[data-ui-sort-drop='after']::after {
+  inset-inline-end: -3px;
+}
+.nuxt-query-badge-announcement {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Reorder focus represents the complete criterion; removal keeps its own focus. */
+@supports selector(:has(*)) {
+  .nuxt-query-badge:has(
+    .nuxt-query-badge-content[data-ui-sort-reorder]:focus-visible
+  ) {
+    @apply outline-3 outline-inverted/25;
+    outline-offset: var(--nuxt-contained-focus-offset, 0px);
+  }
+  .nuxt-query-badge
+    .nuxt-query-badge-content[data-ui-sort-reorder]:focus-visible {
+    outline: none;
+  }
+}
+
+/* Preserve a system-colored focus indicator when translucency is overridden. */
+@media (forced-colors: active) {
+  .nuxt-query-badge-content[data-ui-sort-reorder]:focus-visible {
+    outline: 2px solid Highlight;
+  }
+  @supports selector(:has(*)) {
+    .nuxt-query-badge:has(
+      .nuxt-query-badge-content[data-ui-sort-reorder]:focus-visible
+    ) {
+      outline: 2px solid Highlight;
+    }
+  }
+}
+
+/* Floating launcher and drawer allocation integration. */
+.nuxt-ui-floating {
+  --ui-floating-clearance: 12;
+  width: max-content;
+  max-width: calc(100dvw - 24px);
+  max-height: calc(100dvh - 24px);
+}
+/* A standalone icon action must remain visible over arbitrary page content.
+   Keep native button interaction/focus; the immediate host supplies its surface. */
+.nuxt-ui-floating > .nuxt-button-host:has(> [data-ui-button-variant='icon']) {
+  background: var(--ui-bg-elevated);
+  border: 1px solid var(--ui-border);
+  border-radius: calc(var(--ui-radius) * 2);
+  box-shadow: var(--shadow-md);
+}
+.nuxt-ui-floating > .nuxt-button-host > [data-ui-button-variant='icon'] {
+  min-inline-size: 3rem;
+  min-block-size: 3rem;
+  font-size: 1.5rem;
+  border-radius: inherit;
+}
+.nuxt-ui-floating[data-draggable] {
+  touch-action: none;
+}
+.nuxt-ui-floating-move {
+  position: absolute;
+  inset-inline-end: 0;
+  inset-block-start: 100%;
+  max-width: calc(100dvw - 24px);
+  padding: 0.5rem;
+  background: var(--ui-bg-elevated);
+  color: var(--ui-text);
+  border: 1px solid var(--ui-border);
+}
+.nuxt-ui-floating-move label {
+  display: flex;
+  flex-direction: column;
+}
+.nuxt-ui-floating-move input {
+  touch-action: auto;
+}
+.nuxt-overlay[data-ui-overlay='drawer'][data-docked] {
+  position: relative !important;
+  inset: auto !important;
+  margin: 0 !important;
+  max-width: none !important;
+  max-height: none !important;
+  height: 100%;
+  display: flex;
+  visibility: visible;
+  flex-direction: column;
+}
+[data-ui-overlay='drawer'][data-docked][hidden] {
+  display: none !important;
+}
+.nuxt-ui-drawer-resize {
+  position: absolute;
+  touch-action: none;
+  background: transparent;
+  outline-offset: -2px;
+}
+[data-edge='end'] > .nuxt-ui-drawer-resize {
+  inset-inline-start: 0;
+  inset-block: 0;
+  width: 8px;
+  cursor: ew-resize;
+}
+[data-edge='start'] > .nuxt-ui-drawer-resize {
+  inset-inline-end: 0;
+  inset-block: 0;
+  width: 8px;
+  cursor: ew-resize;
+}
+[data-edge='top'] > .nuxt-ui-drawer-resize {
+  inset-block-end: 0;
+  inset-inline: 0;
+  height: 8px;
+  cursor: ns-resize;
+}
+[data-edge='bottom'] > .nuxt-ui-drawer-resize {
+  inset-block-start: 0;
+  inset-inline: 0;
+  height: 8px;
+  cursor: ns-resize;
+}
+.nuxt-ui-drawer-resize:focus-visible {
+  outline: 2px solid currentColor;
+}
+
+/* A retained overlay can stay below an already-live native child popup. */
+.nuxt-overlay[data-ui-overlay='drawer'][data-css-panel] {
+  display: flex;
+  visibility: visible;
+  flex-direction: column;
+}
+[data-ui-overlay='drawer'][data-css-panel][hidden] {
+  display: none !important;
+}
+
+/* Native Checkbox/Switch descriptions share the label's text column. */
+.nuxt-checkable-help,
+.nuxt-checkable-error {
+  display: block;
+}
+
+@media (min-width: 40rem) {
+  .nuxt-strategy-field[data-ui-checkable='control-aligned']:not(
+      [data-ui-checkable-group]
+    ) {
+    padding-inline-start: calc(25% + 0.5rem);
+  }
+  .nuxt-field-group:is(
+      [data-ui-checkable='control-aligned'],
+      [data-ui-checkable='separated']
+    )
+    > legend {
+    float: inline-start;
+    inline-size: 25%;
+    text-align: start;
+  }
+  .nuxt-field-group[data-ui-label-align='far'] > legend {
+    text-align: start;
+  }
+  .nuxt-field-group:is(
+      [data-ui-checkable='control-aligned'],
+      [data-ui-checkable='separated']
+    )
+    > .nuxt-strategy-content {
+    margin-inline-start: calc(25% + 0.5rem);
+  }
+  .nuxt-strategy-field[data-ui-checkable='separated'] {
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+  }
+  .nuxt-strategy-field[data-ui-checkable='separated'] > [data-slot='wrapper'] {
+    flex: 0 0 25%;
+    text-align: start;
+  }
+  .nuxt-strategy-field[data-ui-checkable='separated'][data-ui-label-align='far']
+    > [data-slot='wrapper'] {
+    text-align: start;
+  }
+  .nuxt-strategy-field[data-ui-checkable='separated'] > :last-child {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+[data-ui-drawer-layout][data-ui-drawer-motion] {
+  transition:
+    grid-template-columns 200ms var(--ease-out, ease-out),
+    grid-template-rows 200ms var(--ease-out, ease-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-ui-drawer-layout][data-ui-drawer-motion] {
+    transition: none;
+  }
+}
+@media (min-width: 40rem) {
+  .nuxt-field-group[data-ui-label-align='near'] > legend,
+  .nuxt-strategy-field[data-ui-checkable='separated'][data-ui-label-align='near']
+    > [data-slot='wrapper'] {
+    text-align: end;
+  }
+}
+
+@media (min-width: 40rem) {
+  .nuxt-strategy-field[data-ui-label-align='near'] > [data-slot='wrapper'] {
+    text-align: end;
+  }
+  .nuxt-strategy-field[data-ui-label-align='near']
+    > [data-slot='wrapper']
+    > [data-slot='labelWrapper'] {
+    justify-content: end;
+  }
+  .nuxt-strategy-field[data-ui-checkable='separated'][data-ui-label-align='far']
+    > [data-slot='wrapper']
+    > [data-slot='labelWrapper'] {
+    justify-content: start;
+  }
+}
+
+/* Drawer presentation owns the shared-edge line and depth. The docking
+   frame separates this paint from clipped motion; layouts only allocate. */
+.nuxt-drawer-dock {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+}
+.nuxt-drawer-dock-motion {
+  overflow: clip;
+  height: 100%;
+  min-height: 0;
+}
+/* Keep the full-size moving surface anchored at its attached outer edge.
+   Its main-facing edge then follows the animated allocation, including when
+   the track is narrower/shorter than the retained surface. */
+.nuxt-drawer-dock-motion {
+  display: flex;
+  flex-direction: column;
+}
+.nuxt-drawer-dock-motion > [data-ui-overlay='drawer'][data-docked] {
+  flex-shrink: 0;
+}
+.nuxt-drawer-dock[data-edge='start'] > .nuxt-drawer-dock-motion {
+  align-items: start;
+}
+.nuxt-drawer-dock[data-edge='end'] > .nuxt-drawer-dock-motion {
+  align-items: end;
+}
+.nuxt-drawer-dock[data-edge='bottom'] > .nuxt-drawer-dock-motion {
+  justify-content: end;
+}
+.nuxt-drawer-depth {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  container-type: size;
+}
+.nuxt-drawer-dock > .nuxt-drawer-depth {
+  display: none;
+}
+.nuxt-drawer-dock:has([data-ui-overlay='drawer'][data-docked]:not([hidden]))
+  > .nuxt-drawer-depth {
+  display: block;
+}
+.nuxt-drawer-depth-shadow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100cqw;
+  height: 100cqh;
+  transform: translate(-50%, -50%);
+  box-sizing: border-box;
+  border: 1px solid var(--ui-border);
+  box-shadow: var(--shadow-md);
+}
+/* Orient the native downward shadow toward main, retaining its theme recipe. */
+.nuxt-drawer-depth[data-edge='top'] {
+  clip-path: inset(calc(100% - 1px) 0 -100vmax 0);
+}
+.nuxt-drawer-depth[data-edge='bottom'] {
+  clip-path: inset(-100vmax 0 calc(100% - 1px) 0);
+}
+.nuxt-drawer-depth[data-edge='bottom'] > span {
+  transform: translate(-50%, -50%) scaleY(-1);
+}
+.nuxt-drawer-depth:is([data-edge='start'], [data-edge='end']) > span {
+  width: 100cqh;
+  height: 100cqw;
+}
+.nuxt-drawer-depth[data-edge='start'],
+.nuxt-drawer-depth[data-edge='end']:dir(rtl) {
+  clip-path: inset(0 -100vmax 0 calc(100% - 1px));
+}
+.nuxt-drawer-depth[data-edge='start'] > span,
+.nuxt-drawer-depth[data-edge='end']:dir(rtl) > span {
+  transform: translate(-50%, -50%) rotate(-90deg);
+}
+.nuxt-drawer-depth[data-edge='end'],
+.nuxt-drawer-depth[data-edge='start']:dir(rtl) {
+  clip-path: inset(0 calc(100% - 1px) 0 -100vmax);
+}
+.nuxt-drawer-depth[data-edge='end'] > span,
+.nuxt-drawer-depth[data-edge='start']:dir(rtl) > span {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+@media (forced-colors: active) {
+  .nuxt-drawer-depth-shadow {
+    border-color: CanvasText;
+  }
+}
+
+/* Edge reconfiguration replaces track topology; it is not a slide between edges. */
+[data-ui-drawer-layout][data-ui-drawer-reconfigure],
+[data-ui-drawer-reconfigure]
+  > .nuxt-drawer-dock
+  > .nuxt-drawer-dock-motion
+  > .nuxt-overlay[data-docked] {
+  transition: none !important;
+}
+[data-ui-drawer-reconfigure]
+  > .nuxt-drawer-dock
+  > .nuxt-drawer-dock-motion
+  > .nuxt-overlay[data-docked] {
+  transform: none !important;
+}
+
+.nuxt-collection-data-summary {
+  flex: none;
+  min-inline-size: 0;
+  padding-block-start: 0.75rem;
+  overflow-wrap: anywhere;
+}
+.nuxt-collection-summary-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: 0.75rem 1.5rem;
+  margin: 0;
+}
+.nuxt-collection-summary-content > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0.75rem;
+  min-inline-size: 0;
+}
+.nuxt-collection-summary-content dt {
+  font-size: 0.875em;
+  font-weight: 400;
+  color: var(--ui-text-muted);
+}
+.nuxt-collection-summary-content dd {
+  min-inline-size: 0;
+  margin: 0;
+  text-align: end;
+  font-size: 1.125em;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.nuxt-table [data-collection-summary-label] {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* A full-height form passes its bounded offer to one authored layout. */
+.nuxt-form[data-form-full] {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+  min-block-size: 0;
+  block-size: 100%;
+  flex: 1 1 auto;
+}
+
+/* Supporting actions remain outside the table's row scrollport. */
+.nuxt-collection-frame[data-collection-full] > .nuxt-table-footer {
+  flex: none;
+}
+
+/* Creation is a decorative row, not a mounted record/editor or loading state. */
+.nuxt-table-add-track {
+  background: var(--ui-bg);
+  color: var(--ui-text);
+}
+.nuxt-table .nuxt-table-add-track > td {
+  padding: 0;
+  background: var(--ui-bg);
+}
+.nuxt-table-add-preview {
+  display: grid;
+  position: relative;
+  inline-size: 100%;
+  min-inline-size: 0;
+  box-sizing: border-box;
+}
+.nuxt-table-add-cell {
+  grid-row: 1;
+  min-inline-size: 0;
+  padding: 1rem;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+.nuxt-table-add-cell > span {
+  display: block;
+  block-size: 2rem;
+  background: color-mix(in srgb, var(--ui-text) 7%, var(--ui-bg));
+}
+.nuxt-table-add-action {
+  position: sticky;
+  inset-inline-start: 0;
+  grid-column: 1 / -1;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-inline-size: 100%;
+  padding-block: 0.5rem;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+.nuxt-table-add-action > * {
+  pointer-events: auto;
+}
+
+/* Yield header pinning before sticky regions can obstruct row controls. */
+.nuxt-collection[data-full][data-add-row-compact] .nuxt-table thead {
+  position: static;
+}
+
+.nuxt-ui-progress-bar {
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+/* Native UProgress rounds paint to whole percentages. Preserve precise input. */
+.nuxt-ui-progress-bar[data-state='determinate'] [data-slot='indicator'] {
+  transform: translateX(calc(-1 * var(--ui-progress-remaining))) !important;
+}
+.nuxt-ui-progress-bar[data-state='determinate']:dir(rtl)
+  [data-slot='indicator'] {
+  transform: translateX(var(--ui-progress-remaining)) !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nuxt-ui-progress-bar [data-slot='indicator'] {
+    animation: none;
+    transition: none;
+  }
+  .nuxt-ui-progress-bar[data-state='indeterminate'] [data-slot='indicator'] {
+    inline-size: 35%;
+    margin-inline-start: 32.5%;
+    transform: none;
+  }
+}

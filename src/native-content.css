@@ -1,0 +1,171 @@
+/* Native HTML content baseline. Imported by style.css; no wrapper/class opt-in.
+   Higher-specificity component styles and toolkit component/utility layers retain ownership. */
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--ui-text-highlighted);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.25;
+    margin-block: 0 0.5em;
+  }
+  h1 {
+    font-size: var(--text-3xl);
+  }
+  h2 {
+    font-size: var(--text-2xl);
+  }
+  h3 {
+    font-size: var(--text-xl);
+  }
+  h4 {
+    font-size: var(--text-lg);
+  }
+  h5 {
+    font-size: var(--text-base);
+  }
+  h6 {
+    font-size: var(--text-sm);
+  }
+  p,
+  ul,
+  ol,
+  pre {
+    margin-block: 0 1em;
+  }
+  ul {
+    list-style-type: disc;
+  }
+  ol {
+    list-style-type: decimal;
+  }
+  /* Let the HTML type hint supply numbering below this base layer, instead
+     of overriding it with either Preflight's none or our ordinary decimal. */
+  ol[type] {
+    list-style-type: revert-layer;
+  }
+  ul,
+  ol {
+    padding-inline-start: 1.5em;
+  }
+  li > ul,
+  li > ol {
+    margin-block: 0;
+  }
+  ul ul {
+    list-style-type: circle;
+  }
+  ul ul ul {
+    list-style-type: square;
+  }
+  a[href] {
+    color: var(--ui-primary);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+  a[href]:focus-visible {
+    outline: 2px solid var(--ui-primary);
+    outline-offset: var(--nuxt-contained-focus-offset, 2px);
+  }
+  :where(kbd) {
+    padding: 0.125em 0.25em;
+    border: 1px solid var(--ui-border);
+    border-radius: 0.25em;
+  }
+  :where(mark) {
+    color: var(--ui-text);
+    background: var(--ui-bg-accented);
+    padding-inline: 0.125em;
+  }
+  ins {
+    text-decoration: underline;
+  }
+  del {
+    text-decoration: line-through;
+  }
+  hr {
+    margin-block: 1em;
+    border-color: var(--ui-border);
+  }
+  /* Preserve whitespace while wrapping long source lines; no hidden or
+   keyboard-inaccessible horizontal scrollport is introduced by a bare pre. */
+  :where(pre) {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    max-inline-size: 100%;
+  }
+  :where(code, kbd, samp) {
+    overflow-wrap: anywhere;
+  }
+  :where(p, li, h1, h2, h3, h4, h5, h6, a[href]) {
+    overflow-wrap: anywhere;
+  }
+  @media (forced-colors: active) {
+    :where(mark) {
+      background: Mark;
+      color: MarkText;
+    }
+    a[href]:focus-visible {
+      outline-color: Highlight;
+    }
+  }
+}
+
+/* Native component parts previously depended on Preflight's zero margins,
+   undecorated links and inherited heading size. Restore only those parts in
+   the base layer so configured toolkit utilities still take precedence. */
+@layer base {
+  .nuxt-navigation-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  a.nuxt-navigation-link,
+  a.nuxt-entry-link {
+    text-decoration: none;
+  }
+  /* Breadcrumb's native theme relies on Preflight for undecorated anchors
+     and reset list spacing; prose defaults must not fill those gaps. Keep
+     this in base so application breadcrumb utilities can still override it. */
+  [data-uninterface-breadcrumbs] > [data-slot='list'] {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  [data-uninterface-breadcrumbs] a[data-slot='link'] {
+    text-decoration: none;
+  }
+  .nuxt-strategy-help,
+  .nuxt-strategy-feedback > p {
+    margin-block: 0;
+  }
+  /* Native checkable descriptions are component text, not prose. */
+  .nuxt-field-editor [data-slot='description'],
+  [data-uninterface-choice-group] [data-slot='description'] {
+    margin-block: 0;
+  }
+  /* RadioGroup table labels/descriptions are component text, not prose.
+     Retain native slot spacing and allow configured utilities to override. */
+  [data-uninterface-segmented-select] p[data-slot='label'],
+  [data-uninterface-segmented-select] p[data-slot='description'] {
+    margin-block: 0;
+  }
+  .nuxt-modal [data-slot='title'] {
+    font-size: inherit;
+    line-height: inherit;
+  }
+}
+
+@layer base {
+  /* A sole native prose block allocated as one peer uses the layout's gap.
+   Nested prose and explicit content insets keep their own spacing. */
+  .nuxt-layout-item:where(:not([data-layout-region]))
+    > :where(h1, h2, h3, h4, h5, h6, p, ul, ol, pre, hr):where(
+      :only-child
+    ):where(:not([class])) {
+    margin-block: 0;
+  }
+}

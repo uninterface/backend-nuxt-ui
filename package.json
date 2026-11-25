@@ -1,0 +1,169 @@
+{
+  "name": "@uninterface/backend-nuxt-ui",
+  "version": "4.12.0-alpha1",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "description": "Nuxt UI presentation backend for Uninterface.",
+  "exports": {
+    ".": "./src/index.ts",
+    "./style.css": "./src/style.css",
+    "./capabilities.json": "./capabilities.json",
+    "./vite": "./src/vite.mjs",
+    "./*.vue": "./src/*.vue",
+    "./integration": "./src/integration.ts",
+    "./layout": "./src/layout.ts",
+    "./testing": "./testing/index.ts",
+    "./testing/dom": "./testing/dom.mjs",
+    "./focus": "./src/focus.ts",
+    "./font.css": "./src/font.css",
+    "./font-bundled.css": "./src/font-bundled.css"
+  },
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "dependencies": {
+    "@floating-ui/vue": "1.1.11",
+    "@fontsource-variable/noto-sans-sc": "5.3.1",
+    "@fontsource-variable/noto-sans-tc": "5.3.1",
+    "@fontsource-variable/public-sans": "5.3.0",
+    "@iconify-json/lucide": "^1.2.0",
+    "@internationalized/date": "3.12.4",
+    "@nuxt/icon": "2.5.1",
+    "@nuxt/ui": "4.12.0",
+    "reka-ui": "2.11.0",
+    "tailwindcss": "^4.1.0",
+    "vaul-vue": "0.4.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.56.1",
+    "@uninterface/fonts": "0.0.2",
+    "@uninterface/testing": "0.0.2",
+    "@uninterface/uninterface": "0.0.3",
+    "@vitejs/plugin-vue": "6.0.10",
+    "jsdom": "27.4.0",
+    "typescript": "5.9.3",
+    "vite": "7.3.7",
+    "vue": "3.5.43",
+    "vue-tsc": "3.1.1"
+  },
+  "uninterface": {
+    "testing": {
+      "typography": "testing/typography.json",
+      "componentConformance": {
+        "collectionFooterSharesAt435": false,
+        "retainsEditorsOnColumnReorder": true,
+        "checkableModes": [
+          "flushed",
+          "control-aligned",
+          "separated"
+        ],
+        "fieldLabels": {
+          "placements": [
+            "beside-near",
+            "beside-far"
+          ],
+          "resolves": {
+            "beside": "beside-far",
+            "floating": "show"
+          }
+        },
+        "fieldSizing": {
+          "small": {
+            "fontSize": "smaller"
+          },
+          "extraLarge": {
+            "fontSize": "larger"
+          }
+        },
+        "fieldHelp": "replace-help",
+        "loadingIndicator": {
+          "selector": "[data-slot=\"leadingIcon\"]",
+          "motion": "stops"
+        },
+        "navigation": "disclosure",
+        "segmentedLabelBeside": true
+      },
+      "popoverArrow": {
+        "selector": ".nuxt-overlay-arrow",
+        "placementAttribute": "data-side"
+      },
+      "dom": [
+        "testing/native-component-integration.test.mjs",
+        "testing/strategy-native-presentation.test.mjs",
+        "testing/strategy-native-defaults.test.mjs",
+        "testing/stacking-select.test.mjs",
+        "testing/native-locale.test.mjs",
+        "testing/dependency-identity.test.mjs",
+        "testing/native-icons.test.mjs",
+        "testing/modal-presentation.test.mjs",
+        "testing/modal-popups.test.mjs",
+        "testing/overlay-regions.test.mjs",
+        "testing/drawer-gestures.test.mjs",
+        "testing/collapsible-presentation.test.mjs",
+        "testing/native-content.test.mjs",
+        "testing/breadcrumb-presentation.test.mjs",
+        "testing/temporal-native.test.mjs",
+        "testing/temporal-range.test.mjs",
+        "testing/date-format.test.mjs",
+        "testing/navigation-popups.test.mjs",
+        "testing/upload-presentation.test.mjs",
+        "testing/modal-select-escape.test.mjs",
+        "testing/paginator-presentation.test.mjs",
+        "testing/feedback-presentation.test.mjs",
+        "testing/overlay-arrows.test.mjs",
+        "testing/neutral-button.test.mjs"
+      ],
+      "reference": {
+        "page": "testing/native-reference.html",
+        "browser": "testing/native-reference.spec.ts"
+      },
+      "browser": [
+        "testing/table-ssr-native.spec.ts",
+        "testing/native-paint.spec.ts",
+        "testing/rich-notification.spec.ts",
+        "testing/record-modal-position.spec.ts",
+        "testing/component-conformance.spec.ts",
+        "testing/modal-position.spec.ts",
+        "testing/collapsible-alignment.spec.ts",
+        "testing/native-content.spec.ts",
+        "testing/control-frame.spec.ts",
+        "testing/navigation-popups.spec.ts",
+        "testing/paginator-footer.spec.ts",
+        "testing/feedback-presentation.spec.ts",
+        "testing/segmented-alignment.spec.ts",
+        "testing/drawer-presentation.spec.ts"
+      ],
+      "paginatorGeometry": {
+        "sizeSurface": ".nuxt-paginator-size",
+        "jumperSurface": ".nuxt-paginator-jumper input",
+        "jumperRoot": ".nuxt-paginator-jumper"
+      }
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uninterface/backend-nuxt-ui.git"
+  },
+  "scripts": {
+    "build": "node scripts/build-package.mjs"
+  },
+  "peerDependencies": {
+    "@uninterface/testing": "~0.0.2",
+    "@uninterface/uninterface": "~0.0.3",
+    "vue": "^3.5.43"
+  },
+  "peerDependenciesMeta": {
+    "@uninterface/testing": {
+      "optional": true
+    }
+  },
+  "overrides": {
+    "tough-cookie": {
+      "tldts": "7.4.18"
+    },
+    "tldts": {
+      "tldts-core": "7.4.18"
+    }
+  }
+}
