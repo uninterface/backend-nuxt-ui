@@ -1,31 +1,50 @@
-import { test, expect, type Page } from '@playwright/test'
-import { runTableSsrBaseline } from '../../../tests/table-ssr-baseline.mjs'
+import { test, expect } from '@playwright/test'
+import type { hydrateTable } from './fixtures/table-ssr'
+import { buildNativeTableFixture } from './table-ssr-fixture'
+
+type NativeTablePage = Window & {
+  nativeTable: Awaited<ReturnType<typeof hydrateTable>>
+}
 
 test('native table caption stays visually hidden through hydration and name changes', async ({
   browser,
 }) => {
   test.setTimeout(300_000)
-  const { failures } = await runTableSsrBaseline({
-    browser,
-    heights: [undefined],
-    async inspectServer(page: Page, record) {
-      record.checks.serverCaptionHidden = await page
-        .locator('table > caption')
-        .evaluate((caption) => {
-          const rect = caption.getBoundingClientRect()
-          return (
-            caption.textContent.trim() === 'SSR records' &&
-            getComputedStyle(caption).position === 'absolute' &&
-            rect.width <= 1 &&
-            rect.height <= 1
-          )
+  const fixture = await buildNativeTableFixture()
+  try {
+    const { open } = fixture
+    for (const entry of ['table', 'collection'] as const)
+      for (const empty of [false, true]) {
+        const page = await browser.newPage({
+          viewport: { width: 1200, height: 800 },
         })
-    },
-    async inspectHydration(page: Page, record) {
-      record.checks.reactiveCaption =
-        (await page.locator('table > caption').textContent()) ===
-        'Updated records'
-    },
-  })
-  expect(failures).toEqual([])
+        try {
+          const caption = page.locator('table > caption')
+          const expectHiddenCaption = async (name: string) => {
+            await expect(caption).toHaveText(name)
+            await expect(
+              page.getByRole('table', { name, exact: true }),
+            ).toHaveCount(1)
+            await expect(caption).toHaveCSS('position', 'absolute')
+            const bounds = await caption.boundingBox()
+            expect(bounds?.width).toBeLessThanOrEqual(1)
+            expect(bounds?.height).toBeLessThanOrEqual(1)
+          }
+          await open(page, { entry, empty, idPrefix: 'native-caption' }, () =>
+            expectHiddenCaption('SSR records'),
+          )
+          await expectHiddenCaption('SSR records')
+          await page.evaluate(() =>
+            (window as unknown as NativeTablePage).nativeTable.rename(
+              'Updated records',
+            ),
+          )
+          await expectHiddenCaption('Updated records')
+        } finally {
+          await page.close()
+        }
+      }
+  } finally {
+    await fixture.dispose()
+  }
 })
