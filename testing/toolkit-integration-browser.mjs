@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url'
 import { chromium, expect } from '@playwright/test'
 import { build } from './fixture-build.mjs'
 
-const directory = 'var/ki-058/toolkit-browser'
+const directory = 'var/toolkit-integration-browser'
 mkdirSync(directory, { recursive: true })
 const result = await build({
   logLevel: 'silent',
