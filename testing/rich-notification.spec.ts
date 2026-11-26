@@ -10,6 +10,7 @@ const openFixture = createBrowserFixture(
 test('rich notification gives its body full width and sizes labels to content', async ({
   page,
 }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
   await openFixture(page)
   await page
     .getByRole('button', { name: 'Open report notification', exact: true })
