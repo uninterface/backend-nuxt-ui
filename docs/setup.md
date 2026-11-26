@@ -4,7 +4,7 @@ This guide owns the application integration requirements for `@uninterface/backe
 
 ## Requirements
 
-Use Vue compatible with core's `^3.5.43` peer dependency, Vue-aware TypeScript checking, and Vite with `@vitejs/plugin-vue`. Keep one runtime copy of Vue and core.
+Use Node.js 24 or 26, Vue `^3.5.18`, and Vite `^7.3.7 || ~8.1.6 || ~8.2.4 || ^8.3.3` with a compatible `@vitejs/plugin-vue`. The backend requires Vite for its build hook. Use Vue-aware TypeScript checking and keep one runtime copy of Vue and core.
 
 The adapter pins Nuxt UI 4.12.0 and Reka UI 2.11.0. Nuxt UI, the adapter's direct primitive imports and vaul-vue must resolve the same Reka implementation so their injected contexts agree. Keep the lockfile and these pins coordinated when upgrading; do not independently replace the native primitives.
 
