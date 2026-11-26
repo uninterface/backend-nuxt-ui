@@ -26,6 +26,7 @@
     orientation: undefined as 'horizontal' | 'vertical' | undefined,
   })
   const policy = useUiFieldStrategies(() => props.binding, {
+    ...{ feedbackRoot: element },
     help: 'replace-help',
     defaultLabels: () =>
       nativeField.orientation === 'horizontal' ? 'beside-far' : 'above',
@@ -36,6 +37,13 @@
         : !checkboxes.value &&
           (value === 'above' || (!props.binding.group && value === 'beside')),
   })
+  const deferredIssue = computed(() =>
+    'inlineFeedbackDeferred' in policy.value &&
+    policy.value.inlineFeedbackDeferred === true &&
+    policy.value.failure !== 'show-tooltip'
+      ? policy.value.issue
+      : null,
+  )
   const controlSize = useControlSize('UiField')
   const customFeedback = computed(
     () =>
@@ -59,7 +67,7 @@
         ? {
             help: policy.value.showHelp ? props.binding.help : undefined,
             issue:
-              policy.value.failure !== 'show-tooltip'
+              policy.value.failure !== 'show-tooltip' && !deferredIssue.value
                 ? policy.value.issue
                 : undefined,
             size: controlSize.value,
@@ -150,7 +158,9 @@
         <p
           v-if="policy.issue && policy.failure !== 'show-tooltip'"
           :id="`${binding.id}-issue`"
-          :class="fieldTheme.error()"
+          :class="
+            fieldTheme.error({ class: deferredIssue ? 'sr-only' : undefined })
+          "
         >
           {{ policy.issue }}
         </p>
@@ -191,7 +201,9 @@
           : undefined,
     }"
     :error="
-      checkableFeedback || customFeedback ? false : policy.issue || undefined
+      checkableFeedback || customFeedback || deferredIssue
+        ? false
+        : policy.issue || undefined
     "
     :help="checkableFeedback || customFeedback ? undefined : binding.help"
   >
@@ -224,6 +236,7 @@
             v-if="
               !checkableFeedback &&
               customFeedback &&
+              !deferredIssue &&
               policy.issue &&
               policy.failure !== 'show-tooltip'
             "
@@ -233,10 +246,19 @@
             {{ policy.issue }}
           </p>
         </div>
+        <span
+          v-if="deferredIssue"
+          :id="`${binding.id}-issue`"
+          class="sr-only"
+        >
+          {{ deferredIssue }}
+        </span>
       </div>
     </FieldContent>
     <template
-      v-if="!checkableFeedback && !customFeedback && policy.issue"
+      v-if="
+        !checkableFeedback && !customFeedback && !deferredIssue && policy.issue
+      "
       #error
     >
       <span :id="`${binding.id}-issue`">{{ policy.issue }}</span>
