@@ -46,6 +46,13 @@ Command menus use controlled Reka DropdownMenu primitives and Nuxt UI’s genera
 
 Layout and hosting views implement Uninterface's allocation and scrolling rules using CSS grid/flex and Nuxt UI theme tokens. Content owns its insets; allocation boundaries adjoin. The navbar remains an always-visible, wrapping navigation landmark.
 
+### Layout separators
+
+`UiLayout.vue` supplies `layout.separator.v1` for `UiSeparator`. It paints a
+solid 1px line in the existing peer gap using Nuxt UI's `--ui-border`. A short
+vertical line appears between horizontal peers on the same row. A horizontal
+line spans the layout between vertical peers.
+
 ## Verification
 
 Use the [testing guide](testing.md) to configure acceptance for this backend. Verify keyboard navigation, focus, popup placement and scrolling in a browser.
