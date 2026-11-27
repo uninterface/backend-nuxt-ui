@@ -130,6 +130,7 @@
     ref="navigationSurface"
     class="nuxt-ui-navigation-surface"
     :data-navigation-mode="binding.presentation"
+    :data-navigation-width="binding.width"
     :data-navigation-boundary="
       binding.boundary ??
       (binding.presentation === 'horizontal' ? 'block-end' : 'inline-end')

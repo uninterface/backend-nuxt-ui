@@ -1025,6 +1025,12 @@ body,
 .nuxt-ui-navigation-surface[data-navigation-mode='vertical-tree'] {
   inline-size: 100%;
 }
+.nuxt-ui-navigation-surface[data-navigation-width='content'] {
+  inline-size: max-content;
+}
+.nuxt-ui-navigation-surface[data-navigation-width='full'] {
+  inline-size: 100%;
+}
 .nuxt-ui-navigation-surface[data-navigation-boundary='inline-end'] {
   border-inline-end: 1px solid var(--ui-border);
 }
