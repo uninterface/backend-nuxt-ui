@@ -122,6 +122,7 @@
         "browser": "testing/native-reference.spec.ts"
       },
       "browser": [
+        "testing/avatar-shape.spec.ts",
         "testing/table-ssr-native.spec.ts",
         "testing/native-paint.spec.ts",
         "testing/rich-notification.spec.ts",

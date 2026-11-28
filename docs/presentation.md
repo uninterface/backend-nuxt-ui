@@ -46,6 +46,20 @@ Command menus use controlled Reka DropdownMenu primitives and Nuxt UI’s genera
 
 Layout and hosting views implement Uninterface's allocation and scrolling rules using CSS grid/flex and Nuxt UI theme tokens. Content owns its insets; allocation boundaries adjoin. The navbar remains an always-visible, wrapping navigation landmark.
 
+### Avatars
+
+`UiAvatar` supplies `avatar.v1`. An explicit `px` or `em` size sets both
+dimensions. Otherwise the avatar follows the scoped control-size strategy.
+The adapter uses the native `UAvatar` surface and its theme. The five size
+steps use the XS, SM, MD, LG and XL typography. Each surface is 3.25 times
+that step's font size (52px with 16px neutral text). The adapter supplies the
+image and fallback in the native content slot so the avatar retains a single
+accessible name.
+
+The adapter applies a circular clip for `shape="circle"` even when
+`ui.avatar.slots.root` changes native rounding. The square shape uses
+the theme's `--ui-radius` for its corners.
+
 ### Layout separators
 
 `UiLayout.vue` supplies `layout.separator.v1` for `UiSeparator`. It paints a
